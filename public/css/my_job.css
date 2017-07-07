@@ -1,0 +1,41 @@
+.wrap{
+  margin: 100px auto;
+  padding: 10px;
+}
+.list1{
+  width: 80%;
+  background: url(../images/task1.jpg)no-repeat 0 0;
+  background-size: cover;
+  margin: 0 auto;
+  margin-bottom: 30px;
+  text-indent: 20px;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 400;
+}
+.list2{
+  width: 80%;
+  height: 75px;
+  line-height: 75px;
+  background: url(../images/task2.jpg)no-repeat 0 0;
+  background-size: cover;
+  margin: 0 auto;
+  margin-bottom: 30px;
+  text-align: center;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 400;
+}
+.list3{
+  width: 80%;
+  height: 75px;
+  line-height: 75px;
+  background: url(../images/task3.jpg)no-repeat 0 0;
+  background-size: cover;
+  margin: 0 auto;
+  margin-bottom: 30px;
+  text-align: center;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 400;
+}

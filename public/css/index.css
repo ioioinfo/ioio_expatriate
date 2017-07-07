@@ -1,0 +1,95 @@
+body,html{
+  height: 100%;
+  background: #EFF1FF;
+  position: relative;
+  padding: 1px;
+  background: url(../images/workman1.jpg)no-repeat 0 0;
+  background-size: cover;
+}
+.worker_top{
+  width: 230px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+.worker_top_img{
+  float: left;
+}
+.work_news,.work_infor{
+  padding-top: 22.5px;
+}
+.work_news p,.work_infor p{
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  background: #E6EAFB;
+  border-radius: 50%;
+  text-align: center;
+}
+.work_news p{
+  margin-right: 32.5px;
+  position: relative;
+}
+.news_num{
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  line-height: 21px;
+  background: red;
+  position: absolute;
+  top: -2px;
+  right: -3px;
+  text-align: center;
+  color: #fff;
+}
+.work_infor p{
+  margin-left: 32.5px;
+}
+.work_news p img{
+  width: 25px;
+
+}
+.work_infor p img{
+  width: 20px;
+}
+.work_photo p{
+  width: 85px;
+  height: 85px;
+  border-radius: 50%;
+}
+.work_photo p img{
+  width: 85px;
+  height: 85px;
+  border-radius: 50%;
+}
+.work_name{
+  text-align: center;
+}
+.work_bottom{
+  padding-left: 22px;
+}
+.work_bottom p{
+  color: #98979C;
+}
+.work_bottom p img{
+  width: 15px;
+  height: 15px;
+  margin-right: 30px;
+}
+.work_bottom p span{
+  display: inline-block;
+  width: 65px;
+}
+.work{
+  width: 92%;
+  left: 4%;
+  position: absolute;
+  bottom: 10px;
+  background: #fff;
+  padding: 10px 0;
+
+}
+.work_in{
+  width: 230px;
+  margin:0 auto;
+}

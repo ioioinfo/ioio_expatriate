@@ -37,11 +37,21 @@ exports.register = function(server, options, next) {
             },
         },
 
+        //my_job我的工作
         {
             method: 'GET',
-            path: '/test',
+            path: '/my_job',
             handler: function(request, reply) {
-                return reply("ioio");
+                return reply.view("my_job");
+            },
+        },
+
+        //today_task当日完成任务
+        {
+            method: 'GET',
+            path: '/today_task',
+            handler: function(request, reply) {
+                return reply.view("today_task");
             },
         },
 
