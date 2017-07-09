@@ -1,41 +1,103 @@
+body,html{
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  background: url(../images/my_job.jpg)no-repeat 0 0;
+  background-size: cover;
+}
 .wrap{
-  margin: 100px auto;
+  margin: 0 auto;
   padding: 10px;
+  overflow: hidden;
+}
+.nav{
+  width: 100%;
+  z-index: 9999;
+  display: flex;
+  position: fixed;
+  left: 0;
+  bottom: 0;
 }
 .list1{
-  width: 80%;
+  flex: 1;
+  height: 55px;
+  line-height: 55px;
   background: url(../images/task1.jpg)no-repeat 0 0;
   background-size: cover;
-  margin: 0 auto;
-  margin-bottom: 30px;
-  text-indent: 20px;
+  text-align: center;
   color: #fff;
   font-size: 18px;
-  font-weight: 400;
 }
 .list2{
-  width: 80%;
-  height: 75px;
-  line-height: 75px;
+  flex: 1;
+  height: 55px;
+  line-height: 55px;
   background: url(../images/task2.jpg)no-repeat 0 0;
   background-size: cover;
-  margin: 0 auto;
-  margin-bottom: 30px;
   text-align: center;
   color: #fff;
   font-size: 18px;
-  font-weight: 400;
 }
 .list3{
-  width: 80%;
-  height: 75px;
-  line-height: 75px;
-  background: url(../images/task3.jpg)no-repeat 0 0;
+  flex: 1;
+  height: 55px;
+  line-height:55px;
+  background: url(../images/task1.jpg)no-repeat 0 0;
   background-size: cover;
-  margin: 0 auto;
-  margin-bottom: 30px;
   text-align: center;
   color: #fff;
   font-size: 18px;
+}
+.linshi_task{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  background: #BBDBE8;
+  z-index: 9;
+}
+.linshi_task_list{
+  width: 85%;
+  margin: 10px auto 15px;
+}
+
+.today_task{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 100%;
+  background: #F4F29D;
+  z-index: 9;
+}
+.today_task_list{
+  width: 85%;
+  margin: 10px auto 15px;
+}
+
+.month_task{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 100%;
+  background: #CFDFBB;
+  z-index: 9;
+}
+.month_task_list{
+  width: 85%;
+  margin: 10px auto 15px;
+}
+.background{
+  width: 100%;
+  height: 55px;
+}
+.play_time{
+  font-size: 18px;
   font-weight: 400;
+  color: #6C87D6;
 }

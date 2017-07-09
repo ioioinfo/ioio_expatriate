@@ -55,6 +55,15 @@ exports.register = function(server, options, next) {
             },
         },
 
+        //task管理员任务
+        {
+            method: 'GET',
+            path: '/task',
+            handler: function(request, reply) {
+                return reply.view("task");
+            },
+        },
+
     ]);
 
     next();

@@ -18,6 +18,7 @@ module.exports = {
         index: './app/index.jsx',
         my_job: './app/my_job.jsx',
         today_task: './app/today_task.jsx',
+        task: './app/task.jsx',
     },
     output: {
         path: __dirname,

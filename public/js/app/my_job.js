@@ -22032,40 +22032,260 @@ var ReactDOM = __webpack_require__(80);
 // 框架
 
 var Wrap = function (_React$Component) {
-    _inherits(Wrap, _React$Component);
+  _inherits(Wrap, _React$Component);
 
-    function Wrap() {
-        _classCallCheck(this, Wrap);
+  function Wrap(props) {
+    _classCallCheck(this, Wrap);
 
-        return _possibleConstructorReturn(this, (Wrap.__proto__ || Object.getPrototypeOf(Wrap)).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, (Wrap.__proto__ || Object.getPrototypeOf(Wrap)).call(this, props));
+
+    _this.handleClick = _this.handleClick.bind(_this);
+    _this.handleClick1 = _this.handleClick1.bind(_this);
+    _this.handleClick2 = _this.handleClick2.bind(_this);
+    return _this;
+  }
+
+  _createClass(Wrap, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      $(".list1").css("font-size", "18px");
+      $(".list2").css("font-size", "14px");
+      $(".list3").css("font-size", "14px");
+
+      $(".list1").css("color", "#6C87D6");
+      $(".list2").css("color", "#fff");
+      $(".list3").css("color", "#fff");
     }
+  }, {
+    key: 'handleClick',
+    value: function handleClick(e) {
+      $(".list1").css("font-size", "18px");
+      $(".list2").css("font-size", "14px");
+      $(".list3").css("font-size", "14px");
 
-    _createClass(Wrap, [{
-        key: 'render',
-        value: function render() {
-            return React.createElement(
-                'div',
-                { className: 'wrap' },
-                React.createElement(
-                    'div',
-                    { className: 'list1' },
-                    ' \u4E34\u671F\u4EFB\u52A1'
-                ),
-                React.createElement(
-                    'div',
-                    { className: 'list2' },
-                    '\u5F53\u5929\u5B8C\u6210\u4EFB\u52A1\u67E5\u770B'
-                ),
-                React.createElement(
-                    'div',
-                    { className: 'list3' },
-                    '\u672C\u6708\u5B8C\u6210\u4EFB\u52A1\u67E5\u770B'
-                )
-            );
-        }
-    }]);
+      $(".list1").css("color", "#6C87D6");
+      $(".list2").css("color", "#fff");
+      $(".list3").css("color", "#fff");
 
-    return Wrap;
+      var window_left = $(window).width();
+      $(".today_task").css("left", window_left);
+      $(".month_task").css("left", window_left);
+      $(".linshi_task").css("left", window_left);
+      $(".today_task").css("z-index", "9");
+      $(".linshi_task").css("z-index", "99");
+      $(".month_task").css("z-index", "9");
+      $(".linshi_task").animate({ left: "0" }, 300);
+    }
+  }, {
+    key: 'handleClick1',
+    value: function handleClick1(e) {
+      $(".list1").css("font-size", "14px");
+      $(".list2").css("font-size", "18px");
+      $(".list3").css("font-size", "14px");
+
+      $(".list1").css("color", "#fff");
+      $(".list2").css("color", "#6C87D6");
+      $(".list3").css("color", "#fff");
+
+      var window_left = $(window).width();
+      $(".linshi_task").css("left", window_left);
+      $(".today_task").css("left", window_left);
+      $(".month_task").css("left", window_left);
+      $(".today_task").css("z-index", "99");
+      $(".linshi_task").css("z-index", "9");
+      $(".month_task").css("z-index", "9");
+      $(".today_task").animate({ left: "0" }, 300);
+    }
+  }, {
+    key: 'handleClick2',
+    value: function handleClick2(e) {
+      $(".list1").css("font-size", "14px");
+      $(".list2").css("font-size", "14px");
+      $(".list3").css("font-size", "18px");
+
+      $(".list1").css("color", "#fff");
+      $(".list2").css("color", "#fff");
+      $(".list3").css("color", "#6C87D6");
+
+      var window_left = $(window).width();
+      $(".linshi_task").css("left", window_left);
+      $(".today_task").css("left", window_left);
+      $(".month_task").css("left", window_left);
+      $(".today_task").css("z-index", "9");
+      $(".linshi_task").css("z-index", "9");
+      $(".month_task").css("z-index", "99");
+      $(".month_task").animate({ left: "0" }, 300);
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return React.createElement(
+        'div',
+        { className: 'wrap' },
+        React.createElement(
+          'div',
+          { className: 'nav' },
+          React.createElement(
+            'div',
+            { className: 'list1', onClick: this.handleClick },
+            ' \u4E34\u671F\u4EFB\u52A1'
+          ),
+          React.createElement(
+            'div',
+            { className: 'list2', onClick: this.handleClick1 },
+            '\u5F53\u5929\u5B8C\u6210\u4EFB\u52A1\u67E5\u770B'
+          ),
+          React.createElement(
+            'div',
+            { className: 'list3', onClick: this.handleClick2 },
+            '\u672C\u6708\u5B8C\u6210\u4EFB\u52A1\u67E5\u770B'
+          )
+        ),
+        React.createElement(
+          'div',
+          { className: 'linshi_task' },
+          React.createElement(
+            'div',
+            { className: 'linshi_task_list' },
+            React.createElement(
+              'p',
+              { className: 'play_time' },
+              '\u8BA1\u5212\u5B8C\u6210\u65F6\u95F4\uFF1A',
+              React.createElement(
+                'span',
+                null,
+                '2017/7/10'
+              )
+            ),
+            React.createElement(
+              'p',
+              null,
+              '\u4EFB\u52A1\u7F16\u53F7\uFF1A1'
+            ),
+            React.createElement(
+              'p',
+              null,
+              '\u5730\u70B9\uFF1A\u5B9D\u5C71\uFF0C\u547C\u5170\u8DEF911\u5F04'
+            ),
+            React.createElement(
+              'p',
+              null,
+              '\u961F\u53CB\uFF1A\u5F20\u4E09\uFF0C\u674E\u56DB\uFF0C\u738B\u4E94'
+            ),
+            React.createElement(
+              'p',
+              null,
+              '\u8054\u7CFB\u5BA2\u6237\uFF1A17621140956'
+            ),
+            React.createElement(
+              'p',
+              null,
+              '\u4EFB\u52A1\u63CF\u8FF0\uFF1A\u548C\u67D0\u67D0\u53BB\u67D0\u5730\u8054\u7CFB\u67D0\u5BA2\u6237\u5B89\u88C5\u5145\u7535\u6869'
+            ),
+            React.createElement(
+              'p',
+              null,
+              '\u8BA1\u5212\u5DE5\u4F5C\u91CF\uFF1A10 H'
+            ),
+            React.createElement('hr', null)
+          ),
+          React.createElement('div', { className: 'background' })
+        ),
+        React.createElement(
+          'div',
+          { className: 'today_task' },
+          React.createElement(
+            'div',
+            { className: 'today_task_list' },
+            React.createElement(
+              'p',
+              null,
+              '\u8BA1\u5212\u5B8C\u6210\u65F6\u95F4\uFF1A2017/7/10'
+            ),
+            React.createElement(
+              'p',
+              null,
+              '\u4EFB\u52A1\u7F16\u53F7\uFF1A1'
+            ),
+            React.createElement(
+              'p',
+              null,
+              '\u5730\u70B9\uFF1A\u5B9D\u5C71\uFF0C\u547C\u5170\u8DEF911\u5F04'
+            ),
+            React.createElement(
+              'p',
+              null,
+              '\u961F\u53CB\uFF1A\u5F20\u4E09\uFF0C\u674E\u56DB\uFF0C\u738B\u4E94'
+            ),
+            React.createElement(
+              'p',
+              null,
+              '\u8054\u7CFB\u5BA2\u6237\uFF1A17621140956'
+            ),
+            React.createElement(
+              'p',
+              null,
+              '\u4EFB\u52A1\u63CF\u8FF0\uFF1A\u548C\u67D0\u67D0\u53BB\u67D0\u5730\u8054\u7CFB\u67D0\u5BA2\u6237\u5B89\u88C5\u5145\u7535\u6869'
+            ),
+            React.createElement(
+              'p',
+              null,
+              '\u8BA1\u5212\u5DE5\u4F5C\u91CF\uFF1A10 H'
+            ),
+            React.createElement('hr', null)
+          ),
+          React.createElement('div', { className: 'background' })
+        ),
+        React.createElement(
+          'div',
+          { className: 'month_task' },
+          React.createElement(
+            'div',
+            { className: 'month_task_list' },
+            React.createElement(
+              'p',
+              null,
+              '\u8BA1\u5212\u5B8C\u6210\u65F6\u95F4\uFF1A2017/7/10'
+            ),
+            React.createElement(
+              'p',
+              null,
+              '\u4EFB\u52A1\u7F16\u53F7\uFF1A1'
+            ),
+            React.createElement(
+              'p',
+              null,
+              '\u5730\u70B9\uFF1A\u5B9D\u5C71\uFF0C\u547C\u5170\u8DEF911\u5F04'
+            ),
+            React.createElement(
+              'p',
+              null,
+              '\u961F\u53CB\uFF1A\u5F20\u4E09\uFF0C\u674E\u56DB\uFF0C\u738B\u4E94'
+            ),
+            React.createElement(
+              'p',
+              null,
+              '\u8054\u7CFB\u5BA2\u6237\uFF1A17621140956'
+            ),
+            React.createElement(
+              'p',
+              null,
+              '\u4EFB\u52A1\u63CF\u8FF0\uFF1A\u548C\u67D0\u67D0\u53BB\u67D0\u5730\u8054\u7CFB\u67D0\u5BA2\u6237\u5B89\u88C5\u5145\u7535\u6869'
+            ),
+            React.createElement(
+              'p',
+              null,
+              '\u8BA1\u5212\u5DE5\u4F5C\u91CF\uFF1A10 H'
+            ),
+            React.createElement('hr', null)
+          ),
+          React.createElement('div', { className: 'background' })
+        )
+      );
+    }
+  }]);
+
+  return Wrap;
 }(React.Component);
 
 ;

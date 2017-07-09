@@ -22083,7 +22083,12 @@ var Wrap = function (_React$Component) {
                 React.createElement(
                   'p',
                   null,
-                  React.createElement('img', { src: 'images/work.png', alt: '' })
+                  React.createElement('img', { src: 'images/work.png', alt: '' }),
+                  React.createElement(
+                    'span',
+                    { className: 'news_num' },
+                    '99'
+                  )
                 )
               )
             ),
@@ -22102,20 +22107,9 @@ var Wrap = function (_React$Component) {
                 React.createElement(
                   'span',
                   null,
-                  '\u6280\u80FD'
+                  '\u5DE5\u9F84'
                 ),
-                ': \u6316\u5751'
-              ),
-              React.createElement(
-                'p',
-                null,
-                React.createElement('img', { src: 'images/shulian.png', alt: '' }),
-                React.createElement(
-                  'span',
-                  null,
-                  '\u719F\u7EC3\u5EA6'
-                ),
-                ': 9 \u7EA7'
+                ': 4\u5E74'
               ),
               React.createElement(
                 'p',

@@ -38,12 +38,13 @@ body,html{
   background: red;
   position: absolute;
   top: -2px;
-  right: -3px;
+  right: 2px;
   text-align: center;
   color: #fff;
 }
 .work_infor p{
   margin-left: 32.5px;
+  position: relative;
 }
 .work_news p img{
   width: 25px;
