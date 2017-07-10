@@ -6,11 +6,39 @@ var ReactDOM = require('react-dom');
 class Wrap extends React.Component {
     constructor(props) {
         super(props);
+        this.handClick=this.handClick.bind(this);
+        this.rowData=this.rowData.bind(this);
         this.state={taskitem:[]};
     }
-    componentDidMount(){
+    handClick(){
+      var working_hours = $(".working_hours").val();
+      var deadline = $(".deadline").val();
+      var address = $(".address").val();
+      var link_name = $(".link_name").val();
+      var mobile = $(".mobile").val();
+      var task_desc = $(".task_desc").val();
       $.ajax({
-          url: "/get_by_id?id=1",
+          url: "/save_task",
+          dataType: 'json',
+          type: 'POST',
+          data: {"working_hours":working_hours,"deadline":deadline,
+                 "address":address,"link_name":link_name,"mobile":mobile,
+                 "task_desc":task_desc},
+          success: function(data) {
+              if (data.success) {
+                this.rowData();
+              }else {
+                  alert("新建失败！");
+              }
+          }.bind(this),
+          error: function(xhr, status, err) {
+          }.bind(this)
+      });
+
+    }
+    rowData(){
+      $.ajax({
+          url: "/list_task",
           dataType: 'json',
           type: 'GET',
           data:{},
@@ -22,12 +50,15 @@ class Wrap extends React.Component {
           }.bind(this)
       });
     }
+    componentDidMount(){
+      this.rowData();
+    }
     render() {
       var style={display: "none"};
         return (
             <div className="wrap">
-              {this.state.taskitem.map(item=> (
-                  <Task item={item} key={item.id} />))
+              {this.state.taskitem.map((item,index)=> (
+                  <Task item={item} key={item.id} index={index} rowData={this.rowData} />))
               }
 
               <div className="background"></div>
@@ -40,52 +71,53 @@ class Wrap extends React.Component {
                       <div className="weui-cell">
                           <div className="weui-cell__hd"><label className="weui-label">地址</label></div>
                           <div className="weui-cell__bd">
-                              <input className="weui-input" type="text"  placeholder="请输入安装地址" />
+                              <input className="weui-input address" type="text"  placeholder="请输入安装地址" />
                           </div>
                       </div>
 
                       <div className="weui-cell">
-                          <div className="weui-cell__hd"><label className="weui-label">客户姓名</label></div>
+                          <div className="weui-cell__hd"><label className="weui-label">联系姓名</label></div>
                           <div className="weui-cell__bd">
-                              <input className="weui-input" type="text"  placeholder="请输入客户姓名" />
+                              <input className="weui-input link_name" type="text"  placeholder="请输入客户姓名" />
                           </div>
                       </div>
 
                       <div className="weui-cell">
-                          <div className="weui-cell__hd"><label className="weui-label">联系客户</label></div>
+                          <div className="weui-cell__hd"><label className="weui-label">联系电话</label></div>
                           <div className="weui-cell__bd">
-                              <input className="weui-input" type="text"  placeholder="请输入客户手机号" />
+                              <input className="weui-input mobile" type="text"  placeholder="请输入客户手机号" />
                           </div>
                       </div>
 
                       <div className="weui-cell">
                           <div className="weui-cell__hd"><label className="weui-label">计划工作时长</label></div>
                           <div className="weui-cell__bd">
-                              <input className="weui-input" type="text"  placeholder="请输入预计工作时长/h" />
+                              <input className="weui-input working_hours" type="text"  placeholder="请输入预计工作时长/h" />
                           </div>
                       </div>
 
                       <div className="weui-cell">
                           <div className="weui-cell__hd"><label className="weui-label">预计完成时间</label></div>
                           <div className="weui-cell__bd">
-                              <input className="weui-input" type="datetime-local"  placeholder="" />
+                              <input className="weui-input form_datetime deadline" type="text"  placeholder="" readOnly />
+                          </div>
+                      </div>
+
+                      <div className="weui-cell">
+                          <div className="weui-cell__hd"><label className="weui-label">选择操作员</label></div>
+                          <div className="weui-cell__bd">
+                              <input className="weui-input" placeholder="点击选择操作员" id="showcaozuoyuan" readOnly />
                           </div>
                       </div>
 
                       <div className="weui-cell">
                           <div className="weui-cell__bd">
-                              <textarea className="weui-textarea" placeholder="点击选择操作员" rows="3" id="showcaozuoyuan" readOnly></textarea>
-                          </div>
-                      </div>
-
-                      <div className="weui-cell">
-                          <div className="weui-cell__bd">
-                              <textarea className="weui-textarea" placeholder="任务描述" rows="3"></textarea>
+                              <textarea className="weui-textarea task_desc" placeholder="任务描述" rows="3"></textarea>
                           </div>
                       </div>
 
                       <div className="weui-actionsheet__action">
-                          <div className="weui-actionsheet__cell" id="closeNewfile">保存</div>
+                          <div className="weui-actionsheet__cell" id="closeNewfile" onClick={this.handClick}>保存</div>
                       </div>
                   </div>
               </div>
@@ -98,18 +130,42 @@ class Wrap extends React.Component {
 
 class Task extends React.Component {
     constructor(props) {
-        super(props);
+      super(props);
+      this.handClick=this.handClick.bind(this);
+    }
+
+    handClick(e){
+      var id = $(e.target).data("role");
+      $.ajax({
+          url: "/delete_by_id",
+          dataType: 'json',
+          type: 'POST',
+          data: {"id":id},
+          success: function(data) {
+              if (data.success) {
+                  this.props.rowData();
+                  alert("删除成功！");
+
+              }else {
+                  alert("删除失败！");
+              }
+          }.bind(this),
+          error: function(xhr, status, err) {
+          }.bind(this)
+      });
+
     }
     componentDidMount(){
     }
     render() {
+
         return (
             <ul className="task_infor task_ul">
               <li>
                 <div className="weui-form-preview">
                   <div className="weui-form-preview__hd">
                       <div className="weui-form-preview__item">
-                          <label className="weui-form-preview__label">{this.props.item.plan_date}</label>
+                          <label className="weui-form-preview__label">{this.props.item.deadline}</label>
                           <em className="weui-form-preview__value animation">{this.props.item.state}<span className="glyphicon glyphicon-pencil modify_left" aria-hidden="true"></span></em>
                       </div>
                   </div>
@@ -119,16 +175,16 @@ class Task extends React.Component {
                           <span className="weui-form-preview__value">{this.props.item.address}</span>
                       </div>
                       <div className="weui-form-preview__item">
-                          <label className="weui-form-preview__label">客户电话</label>
+                          <label className="weui-form-preview__label">联系电话</label>
                           <span className="weui-form-preview__value">{this.props.item.mobile}</span>
                       </div>
                       <div className="weui-form-preview__item">
-                          <label className="weui-form-preview__label">客户姓名</label>
+                          <label className="weui-form-preview__label">联系姓名</label>
                           <span className="weui-form-preview__value">{this.props.item.link_name}</span>
                       </div>
                       <div className="weui-form-preview__item">
                           <label className="weui-form-preview__label">计划工作时间</label>
-                          <span className="weui-form-preview__value">{this.props.item.deadline}</span>
+                          <span className="weui-form-preview__value">{this.props.item.working_hours}小时</span>
                       </div>
                       <div className="weui-form-preview__item">
                           <label className="weui-form-preview__label">操作员</label>
@@ -140,8 +196,10 @@ class Task extends React.Component {
                           <span className="weui-form-preview__value">{this.props.item.task_desc}</span>
                       </div>
                     </div>
+
                     <div className="weui-form-preview__ft">
-                        <a className="weui-form-preview__btn weui-form-preview__btn_primary" href="javascript:">分配</a>
+                        <button type="submit"  className="weui-form-preview__btn weui-form-preview__btn_default" data-role={this.props.item.id} onClick={this.handClick}>删除</button>
+                        <button type="submit" className="weui-form-preview__btn weui-form-preview__btn_primary">分配</button>
                     </div>
                   </div>
                 <br/>

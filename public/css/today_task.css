@@ -1,0 +1,35 @@
+
+body,html{
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  background: url(../images/my_job.jpg)no-repeat 0 0;
+  background-size: cover;
+}
+.wrap{
+  margin: 0 auto;
+  padding: 50px;
+  overflow: hidden;
+}
+.list1{
+  flex: 1;
+  height: 75px;
+  line-height: 75px;
+  background: url(../images/task1.jpg)no-repeat 0 0;
+  background-size: cover;
+  text-align: center;
+  color: #fff;
+  font-size: 18px;
+  margin-top: 75px;
+}
+.list2{
+  flex: 1;
+  height: 75px;
+  line-height: 75px;
+  background: url(../images/task2.jpg)no-repeat 0 0;
+  background-size: cover;
+  text-align: center;
+  color: #fff;
+  font-size: 18px;
+  margin-top: 25px;
+}

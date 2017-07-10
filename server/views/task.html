@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
     <title>任务</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-datetimepicker.min.css">
     <link rel="stylesheet" href="css/weui.css">
     <link rel="stylesheet" href="css/task.css">
 </head>
@@ -17,6 +18,8 @@
     </script>
     <script src="js/jquery-3.1.1.min.js" type="text/javascript"></script>
     <script src="js/bootstrap.min.js"></script>
+    <script src="js/bootstrap-datetimepicker.min.js"></script>
+    <script src="js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
     <script src="js/app/task.js"></script>
 
     <script type="text/javascript">
@@ -50,6 +53,17 @@
             });
         });
     });
+
+    $(function(){
+      $(".form_datetime").datetimepicker({
+          language:"zh-CN",
+          format: 'yyyy-mm-dd hh:ii',
+          autoclose: true,
+          minView:0,        //关闭时分秒
+          todayButton:false    //关闭选择今天按钮
+      });
+    })
+
     </script>
 </body>
 </html>

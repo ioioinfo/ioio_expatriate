@@ -73,6 +73,15 @@ exports.register = function(server, options, next) {
             },
         },
 
+        //search搜索查看已完成任务
+        {
+            method: 'GET',
+            path: '/search',
+            handler: function(request, reply) {
+                return reply.view("search");
+            },
+        },
+
     ]);
 
     next();

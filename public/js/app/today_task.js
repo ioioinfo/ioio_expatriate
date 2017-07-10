@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 185);
+/******/ 	return __webpack_require__(__webpack_require__.s = 186);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -22015,7 +22015,8 @@ module.exports = traverseAllChildren;
 /* 182 */,
 /* 183 */,
 /* 184 */,
-/* 185 */
+/* 185 */,
+/* 186 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -22055,27 +22056,18 @@ var Wrap = function (_React$Component) {
                     React.createElement(
                         'p',
                         null,
-                        '\u65F6\u95F4\uFF1A2017-7-7'
-                    ),
-                    React.createElement(
-                        'p',
-                        null,
-                        '\u5730\u70B9\uFF1A\u5B9D\u5C71\uFF0C\u547C\u5170\u8DEF911\u5F04'
-                    ),
-                    React.createElement(
-                        'p',
-                        null,
-                        '\u4EBA\u7269\uFF1A\u5927\u738B'
-                    ),
-                    React.createElement(
-                        'p',
-                        null,
-                        '\u5BA2\u6237\u7535\u8BDD\uFF1A17621140956'
+                        '\u4E34\u65F6\u4EFB\u52A1\uFF1A2'
                     )
                 ),
-                React.createElement('div', { className: 'list2' }),
-                React.createElement('div', { className: 'list3' }),
-                React.createElement('div', { className: 'list1' })
+                React.createElement(
+                    'div',
+                    { className: 'list2' },
+                    React.createElement(
+                        'p',
+                        null,
+                        '\u5DF2\u5B8C\u6210\u4EFB\u52A1'
+                    )
+                )
             );
         }
     }]);
