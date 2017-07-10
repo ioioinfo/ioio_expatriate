@@ -27,6 +27,7 @@ exports.register = function(server, options, next){
     load_module('amap', './amap.js');
     load_module('wx_api', './wx_api.js');
     load_module('fsm', './fsm.js');
+    load_module('task', './task.js');
   
     next();
 }

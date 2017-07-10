@@ -65,6 +65,8 @@ server.register([
         register: require('./server/controller/index_controller.js')
     }, {
         register: require('./server/controller/main_controller.js')
+    }, {
+        register: require('./server/controller/data_controller.js')
     },
 
 ], function () {
