@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 185);
+/******/ 	return __webpack_require__(__webpack_require__.s = 181);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -22011,11 +22011,7 @@ module.exports = traverseAllChildren;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 181 */,
-/* 182 */,
-/* 183 */,
-/* 184 */,
-/* 185 */
+/* 181 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -22051,31 +22047,59 @@ var Wrap = function (_React$Component) {
                 { className: 'wrap' },
                 React.createElement(
                     'div',
-                    { className: 'list1' },
+                    { className: 'bind_person' },
                     React.createElement(
                         'p',
-                        null,
-                        '\u65F6\u95F4\uFF1A2017-7-7'
+                        { className: 'title' },
+                        '\u7ED1\u5B9A\u7BA1\u7406\u5458'
                     ),
                     React.createElement(
-                        'p',
-                        null,
-                        '\u5730\u70B9\uFF1A\u5B9D\u5C71\uFF0C\u547C\u5170\u8DEF911\u5F04'
+                        'div',
+                        { className: 'weui-cell' },
+                        React.createElement(
+                            'div',
+                            { className: 'weui-cell__hd' },
+                            React.createElement(
+                                'label',
+                                { className: 'weui-label' },
+                                '\u7528\u6237\u540D'
+                            )
+                        ),
+                        React.createElement(
+                            'div',
+                            { className: 'weui-cell__bd' },
+                            React.createElement('input', { className: 'weui-input', type: 'number', placeholder: '\u8BF7\u8F93\u5165\u7528\u6237\u540D' })
+                        )
                     ),
                     React.createElement(
-                        'p',
-                        null,
-                        '\u4EBA\u7269\uFF1A\u5927\u738B'
+                        'div',
+                        { className: 'weui-cell border_bottom' },
+                        React.createElement(
+                            'div',
+                            { className: 'weui-cell__hd' },
+                            React.createElement(
+                                'label',
+                                { className: 'weui-label' },
+                                '\u5BC6\u7801'
+                            )
+                        ),
+                        React.createElement(
+                            'div',
+                            { className: 'weui-cell__bd' },
+                            React.createElement('input', { className: 'weui-input', type: 'number', placeholder: '\u8BF7\u8F93\u5165\u5BC6\u7801' })
+                        )
                     ),
+                    React.createElement('p', { className: 'line' }),
                     React.createElement(
-                        'p',
-                        null,
-                        '\u5BA2\u6237\u7535\u8BDD\uFF1A17621140956'
+                        'div',
+                        { className: 'weui-btn-area' },
+                        React.createElement(
+                            'span',
+                            { className: 'weui-btn weui-btn_primary', id: 'showTooltips' },
+                            '\u786E\u5B9A'
+                        )
                     )
-                ),
-                React.createElement('div', { className: 'list2' }),
-                React.createElement('div', { className: 'list3' }),
-                React.createElement('div', { className: 'list1' })
+                )
             );
         }
     }]);

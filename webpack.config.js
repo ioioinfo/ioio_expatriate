@@ -19,6 +19,7 @@ module.exports = {
         my_job: './app/my_job.jsx',
         today_task: './app/today_task.jsx',
         task: './app/task.jsx',
+        bind: './app/bind.jsx',
     },
     output: {
         path: __dirname,
