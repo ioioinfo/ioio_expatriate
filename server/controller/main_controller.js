@@ -64,6 +64,15 @@ exports.register = function(server, options, next) {
             },
         },
 
+        //bind管理员绑定
+        {
+            method: 'GET',
+            path: '/bind',
+            handler: function(request, reply) {
+                return reply.view("bind");
+            },
+        },
+
     ]);
 
     next();

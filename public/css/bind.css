@@ -1,0 +1,51 @@
+body,html{
+  height: 100%;
+  background: url(../images/bind.jpg)no-repeat 0 0;
+  background-size: cover;
+}
+label{
+  margin: 0;
+}
+.bind_person{
+  width: 78%;
+  margin: 122px auto 0;
+  background: #BFD8F7;
+  padding: 10px 5px;
+}
+.weui-label{
+  width: 70px;
+}
+.weui-btn_primary{
+  background: #00AAEF;
+}
+.title{
+  height: 47px;
+  line-height: 47px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: 400;
+}
+.bind_person{
+-webkit-animation:bounce 1s .2s ease both;
+-moz-animation:bounce 1s .2s ease both;}
+@-webkit-keyframes bounce{
+0%,20%,50%,80%,100%{-webkit-transform:translateY(0)}
+40%{-webkit-transform:translateY(-30px)}
+60%{-webkit-transform:translateY(-15px)}
+}
+@-moz-keyframes bounce{
+0%,20%,50%,80%,100%{-moz-transform:translateY(0)}
+40%{-moz-transform:translateY(-30px)}
+60%{-moz-transform:translateY(-15px)}
+}
+.line{
+    height: 1px;
+    border-top: 1px solid #e5e5e5;
+    color: #e5e5e5;
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+    margin-left: 15px;
+    z-index: 2;
+}
