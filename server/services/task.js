@@ -36,8 +36,11 @@ var nav = function(server) {
         },
         
         //任务列表
-        list_task: function(cb) {
-            var url = host + "outside_task/list_task";
+        list_task: function(stage,cb) {
+            if (!stage) {
+                stage = "";
+            }
+            var url = host + "outside_task/list_task?stage="+stage;
             
             uu_request.do_get_method(url,function(err,content) {
                 cb(err,content)

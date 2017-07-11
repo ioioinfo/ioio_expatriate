@@ -24,9 +24,23 @@ exports.register = function(server, options, next) {
     var service_info = "ioio expatriate";
     
     var task = server.plugins.services.task;
+    var hr = server.plugins.services.hr;
 
     var cookie_options = {ttl:10*365*24*60*60*1000};
     var cookie_key = "ioio_expatriate_cookie";
+    
+    var list_worker = function(cb) {
+        hr.list_worker(function(err,content) {
+            var rows = content.rows;
+            var m_worker = {};
+            
+            _.each(rows,function(row) {
+                m_worker[row.id] = row.worker_name;
+            });
+            
+            cb(m_worker);
+        });
+    };
 
     server.route([
         //首页
@@ -36,7 +50,7 @@ exports.register = function(server, options, next) {
             handler: function(request, reply) {
                 var id = request.payload.id;
                 var task_name = request.payload.task_name;
-                var plan_date = request.payload.plan_date;
+                var working_hours = request.payload.working_hours;
                 var deadline = request.payload.deadline;
                 var customer_name = request.payload.customer_name;
                 var address = request.payload.address;
@@ -45,16 +59,16 @@ exports.register = function(server, options, next) {
                 var task_desc = request.payload.task_desc;
                 
                 if (!task_name) {
-                    return reply({"success":false,"message":"param task_name is null","service_info":service_info});
+                    task_name = "工人任务";
                 }
-                if (!plan_date) {
-                    return reply({"success":false,"message":"param plan_date is null","service_info":service_info});
+                if (!working_hours) {
+                    return reply({"success":false,"message":"param working_hours is null","service_info":service_info});
                 }
                 if (!deadline) {
                     return reply({"success":false,"message":"param deadline is null","service_info":service_info});
                 }
                 if (!customer_name) {
-                    return reply({"success":false,"message":"param customer_name is null","service_info":service_info});
+                    customer_name = "客户";
                 }
                 if (!address) {
                     return reply({"success":false,"message":"param address is null","service_info":service_info});
@@ -69,7 +83,7 @@ exports.register = function(server, options, next) {
                     return reply({"success":false,"message":"param task_desc is null","service_info":service_info});
                 }
                 
-                var options = {"id":id,"task_name":task_name,"plan_date":plan_date,"deadline":deadline,"customer_name":customer_name
+                var options = {"id":id,"task_name":task_name,"working_hours":working_hours,"deadline":deadline,"customer_name":customer_name
                 ,"address":address,"link_name":link_name,"mobile":mobile,"task_desc":task_desc};
                 
                 task.save_task(options,function(err,content) {
@@ -82,8 +96,16 @@ exports.register = function(server, options, next) {
             method: "GET",
             path: '/list_task',
             handler: function(request, reply) {
-                task.list_task(function(err,content) {
-                    return reply(content);
+                var stage = request.query.stage;
+                
+                task.list_task(stage,function(err,content) {
+                    var rows = content.rows;
+                    if (!rows) {
+                        return reply({"success":true,"rows":[]});
+                    }
+                    list_worker(function(m_worker){
+                        return reply({"success":true,"rows":rows,"m_worker":m_worker});
+                    });
                 });
             }
         },
@@ -98,7 +120,13 @@ exports.register = function(server, options, next) {
                 }
                 
                 task.get_by_id(id,function(err,content) {
-                    return reply(content);
+                    var rows = content.rows;
+                    if (!rows) {
+                        return reply({"success":true,"rows":[]});
+                    }
+                    list_worker(function(m_worker){
+                        return reply({"success":true,"rows":rows,"m_worker":m_worker});
+                    });
                 });
             }
         },
@@ -132,7 +160,13 @@ exports.register = function(server, options, next) {
                 }
                 
                 task.get_by_person(person_id,function(err,content) {
-                    return reply(content);
+                    var rows = content.rows;
+                    if (!rows) {
+                        return reply({"success":true,"rows":[]});
+                    }
+                    list_worker(function(m_worker){
+                        return reply({"success":true,"rows":rows,"m_worker":m_worker});
+                    });
                 });
             }
         },
@@ -155,6 +189,16 @@ exports.register = function(server, options, next) {
                 }
                 
                 task.assign_worker(id,workers,function(err,content) {
+                    return reply(content);
+                });
+            }
+        },
+        
+        {
+            method: "GET",
+            path: '/list_worker',
+            handler: function(request, reply) {
+                hr.list_worker(function(err,content) {
                     return reply(content);
                 });
             }
