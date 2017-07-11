@@ -154,12 +154,13 @@ exports.register = function(server, options, next) {
             path: '/get_by_person',
             handler: function(request,reply) {
                 var person_id = request.query.person_id;
+                var stage = request.query.stage;
                 
                 if (!person_id) {
                     return reply({"success":false,"message":"param person_id is null","service_info":service_info});
                 }
                 
-                task.get_by_person(person_id,function(err,content) {
+                task.get_by_person(person_id,stage,function(err,content) {
                     var rows = content.rows;
                     if (!rows) {
                         return reply({"success":true,"rows":[]});

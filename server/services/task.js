@@ -67,8 +67,12 @@ var nav = function(server) {
         },
         
         //按个人查询任务
-        get_by_person: function(person_id,cb) {
-            var url = host + "outside_task/get_by_id?person_id="+person_id;
+        get_by_person: function(person_id,stage,cb) {
+            if (!stage) {
+                stage = "";
+            }
+            
+            var url = host + "outside_task/get_by_id?person_id="+person_id+"&stage="+stage;
             
             uu_request.do_get_method(url,function(err,content) {
                 cb(err,content)
