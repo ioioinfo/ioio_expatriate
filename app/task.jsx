@@ -7,9 +7,65 @@ class Wrap extends React.Component {
     constructor(props) {
         super(props);
         this.handClick=this.handClick.bind(this);
+        this.handClick1=this.handClick1.bind(this);
+        this.handClick2=this.handClick2.bind(this);
+        this.handClick3=this.handClick3.bind(this);
+        this.handClick4=this.handClick4.bind(this);
+        this.handClick5=this.handClick5.bind(this);
         this.rowData=this.rowData.bind(this);
-        this.state={taskitem:[]};
+        this.modifyGet=this.modifyGet.bind(this);
+        this.state={taskitem:[],worksitem:[],nameId:[],m_worker:{},workInfor:{}};
     }
+
+    handClick4(e){
+      var working_hours = $(".working_hours1").val();
+      var deadline = $(".deadline1").val();
+      var address = $(".address1").val();
+      var link_name = $(".link_name1").val();
+      var mobile = $(".mobile1").val();
+      var task_desc = $(".task_desc1").val();
+      $.ajax({
+          url: "/save_task",
+          dataType: 'json',
+          type: 'POST',
+          data: {"id":modifyId,"working_hours":working_hours,"deadline":deadline,
+                 "address":address,"link_name":link_name,"mobile":mobile,
+                 "task_desc":task_desc},
+          success: function(data) {
+              if (data.success) {
+                this.rowData();
+                $("#modify_alert").fadeOut(200);
+              }else {
+                  alert("保存失败！");
+
+              }
+          }.bind(this),
+          error: function(xhr, status, err) {
+          }.bind(this)
+      });
+    }
+
+    handClick2(e){
+      $("#modify_alert").fadeOut(200);
+    }
+
+    // 修改
+    modifyGet(){
+      $.ajax({
+          url: "/get_by_id",
+          dataType: 'json',
+          type: 'GET',
+          data:{"id":modifyId},
+          success: function(data) {
+              this.setState({workInfor:data.rows[0]});
+
+          }.bind(this),
+              error: function(xhr, status, err) {
+          }.bind(this)
+      });
+    }
+
+    // 保存新建
     handClick(){
       var working_hours = $(".working_hours").val();
       var deadline = $(".deadline").val();
@@ -29,13 +85,15 @@ class Wrap extends React.Component {
                 this.rowData();
               }else {
                   alert("新建失败！");
+
               }
           }.bind(this),
           error: function(xhr, status, err) {
           }.bind(this)
       });
-
     }
+
+    // 任务列表
     rowData(){
       $.ajax({
           url: "/list_task",
@@ -43,7 +101,13 @@ class Wrap extends React.Component {
           type: 'GET',
           data:{},
           success: function(data) {
-              this.setState({taskitem:data.rows});
+              var list = data.rows;
+              if(!list){
+
+                  $(".no_task").css("display","block");
+              }
+                this.setState({taskitem:list,m_worker:data.m_worker});
+
 
           }.bind(this),
               error: function(xhr, status, err) {
@@ -51,14 +115,89 @@ class Wrap extends React.Component {
       });
     }
     componentDidMount(){
+      $.ajax({
+          url: "/list_worker",
+          dataType: 'json',
+          type: 'GET',
+          data:{},
+          success: function(data) {
+              this.setState({worksitem:data.rows});
+          }.bind(this),
+              error: function(xhr, status, err) {
+          }.bind(this)
+      });
+
       this.rowData();
     }
+
+    // 工人id
+    handClick1(e){
+      var id = e.target.id;
+      var index = $(e.target).data("role");
+      var caozuoyuan_name = "caozuoyuan_name_"+index;
+      var nameId = this.state.nameId;
+      if(id==caozuoyuan_name){
+        var l = this.state.worksitem[index].id;
+        var caozuoyuan = $(".caozuoyuan_span"+index).html();
+        var name = $.inArray(l, nameId);
+        if(name<0){
+          nameId.push(l);
+          this.setState({nameId:nameId});
+        }else {
+          nameId.splice(name,1);
+          this.setState({nameId:nameId});
+        }
+      }
+    }
+    // 分配功能
+    handClick3(e){
+      var nameId = this.state.nameId;
+      $.ajax({
+          url: "/assign_worker",
+          dataType: 'json',
+          type: 'POST',
+          data: {"id":task_id,"workers":JSON.stringify(nameId)},
+          success: function(data) {
+              if (data.success) {
+                var $caozuoyuan = $('#caozuoyuan');
+                $caozuoyuan.fadeOut(200);
+                this.rowData();
+                alert("分配成功！");
+              }else {
+                  alert("分配失败！");
+
+              }
+          }.bind(this),
+          error: function(xhr, status, err) {
+          }.bind(this)
+      });
+    }
+
+    handClick5(e){
+      $("#caozuoyuan").fadeOut(200);
+    }
+
     render() {
       var style={display: "none"};
+
+      var working_hours1 = this.state.workInfor.working_hours;
+      var deadline1 = this.state.workInfor.deadline;
+      var address1 = this.state.workInfor.address;
+      var link_name = this.state.workInfor.link_name;
+      var mobile1 = this.state.workInfor.mobile;
+      var task_desc1 = this.state.workInfor.task_desc;
+
+      $(".working_hours1").val(working_hours1);
+      $(".deadline1").val(deadline1);
+      $(".address1").val(address1);
+      $(".link_name1").val(link_name);
+      $(".mobile1").val(mobile1);
+      $(".task_desc1").val(task_desc1);
+
         return (
             <div className="wrap">
               {this.state.taskitem.map((item,index)=> (
-                  <Task item={item} key={item.id} index={index} rowData={this.rowData} />))
+                  <Task item={item} key={item.id} m_worker={this.state.m_worker}  index={index} rowData={this.rowData} modifyGet={this.modifyGet} />))
               }
 
               <div className="background"></div>
@@ -106,7 +245,7 @@ class Wrap extends React.Component {
                       <div className="weui-cell">
                           <div className="weui-cell__hd"><label className="weui-label">选择操作员</label></div>
                           <div className="weui-cell__bd">
-                              <input className="weui-input" placeholder="点击选择操作员" id="showcaozuoyuan" readOnly />
+                              <input className="weui-input" placeholder="点击选择操作员"  readOnly />
                           </div>
                       </div>
 
@@ -122,7 +261,85 @@ class Wrap extends React.Component {
                   </div>
               </div>
 
-              <Caozuoyuan/>
+
+              <div className="weui-skin_android" id="caozuoyuan" style={style}>
+                  <div className="weui-mask" onClick={this.handClick2}></div>
+                  <div className="weui-actionsheet">
+                      <div className="weui-actionsheet__menu">
+                      <div className="weui-cells weui-cells_checkbox">
+
+                          {this.state.worksitem.map((item,index)=> (
+                            <label className="weui-cell weui-check__label" key={item.id}>
+                                <div className="weui-cell__hd">
+                                    <input type="checkbox" className="weui-check" name="checkbox1" />
+                                    <i className="weui-icon-checked vertical_align"   id={"caozuoyuan_name_"+index} data-role={index} onClick={this.handClick1}></i>
+                                </div>
+                                <div className="weui-cell__bd">
+                                    <p><span className={"caozuoyuan_span"+index}>{item.worker_name}</span></p>
+                                </div>
+                            </label>))
+                          }
+                          <div className="weui-form-preview__ft workfile">
+                              <button type="submit"  className="weui-form-preview__btn weui-form-preview__btn_default" onClick={this.handClick5}>取消</button>
+                              <button type="submit" className="weui-form-preview__btn weui-form-preview__btn_primary showcaozuoyuan" onClick={this.handClick3}>确认</button>·
+                          </div>
+                      </div>
+                      </div>
+                  </div>
+              </div>
+
+              <div className="js_dialog" id="modify_alert" style={style}>
+                  <div className="weui-mask"></div>
+                  <div className="weui-dialog">
+                      <div className="weui-cell">
+                          <div className="weui-cell__hd"><label className="weui-label">地址</label></div>
+                          <div className="weui-cell__bd">
+                              <input className="weui-input address1" type="text"  placeholder="请输入安装地址" />
+                          </div>
+                      </div>
+
+                      <div className="weui-cell">
+                          <div className="weui-cell__hd"><label className="weui-label">联系姓名</label></div>
+                          <div className="weui-cell__bd">
+                              <input className="weui-input link_name1" type="text"  placeholder="请输入客户姓名" />
+                          </div>
+                      </div>
+
+                      <div className="weui-cell">
+                          <div className="weui-cell__hd"><label className="weui-label">联系电话</label></div>
+                          <div className="weui-cell__bd">
+                              <input className="weui-input mobile1" type="text"  placeholder="请输入客户手机号" />
+                          </div>
+                      </div>
+
+                      <div className="weui-cell">
+                          <div className="weui-cell__hd"><label className="weui-label">计划工作时长</label></div>
+                          <div className="weui-cell__bd">
+                              <input className="weui-input working_hours1" type="text"  placeholder="请输入预计工作时长/h" />
+                          </div>
+                      </div>
+
+                      <div className="weui-cell">
+                          <div className="weui-cell__hd"><label className="weui-label">预计完成时间</label></div>
+                          <div className="weui-cell__bd">
+                              <input className="weui-input form_datetime deadline1" type="text"  placeholder="" readOnly />
+                          </div>
+                      </div>
+
+                      <div className="weui-cell">
+                          <div className="weui-cell__bd">
+                              <textarea className="weui-textarea task_desc1" placeholder="任务描述" rows="3"></textarea>
+                          </div>
+                      </div>
+
+                      <div className="weui-form-preview__ft">
+                            <button type="submit"  className="weui-form-preview__btn weui-form-preview__btn_default" onClick={this.handClick2}>取消</button>
+                          <button type="submit" className="weui-form-preview__btn weui-form-preview__btn_primary showcaozuoyuan" onClick={this.handClick4}>确认</button>
+                      </div>
+                  </div>
+              </div>
+
+              <p className="no_task">抓紧新建任务吧！</p>
             </div>
         );
     }
@@ -132,8 +349,22 @@ class Task extends React.Component {
     constructor(props) {
       super(props);
       this.handClick=this.handClick.bind(this);
+      this.handClick1=this.handClick1.bind(this);
+      this.handClick2=this.handClick2.bind(this);
+      this.state={}
+    }
+    handClick1(e){
+      task_id = $(e.target).data("rose");
+      var $caozuoyuan = $('#caozuoyuan');
+      $caozuoyuan.fadeIn(200);
     }
 
+    handClick2(e){
+      modifyId = $(e.target).data("modify");
+      this.props.modifyGet();
+      $("#modify_alert").fadeIn(200);
+    }
+    // 删除任务
     handClick(e){
       var id = $(e.target).data("role");
       $.ajax({
@@ -158,153 +389,65 @@ class Task extends React.Component {
     componentDidMount(){
     }
     render() {
+        var workers = (<span></span>);
+        if(this.props.item.workers){
+          workers = (<span>{this.props.item.workers.map(item=> (
+              <span key={item}>{this.props.m_worker[item]} /</span>))
+          }</span>)
+        }
 
         return (
-            <ul className="task_infor task_ul">
-              <li>
-                <div className="weui-form-preview">
-                  <div className="weui-form-preview__hd">
-                      <div className="weui-form-preview__item">
-                          <label className="weui-form-preview__label">{this.props.item.deadline}</label>
-                          <em className="weui-form-preview__value animation">{this.props.item.state}<span className="glyphicon glyphicon-pencil modify_left" aria-hidden="true"></span></em>
-                      </div>
-                  </div>
-                  <div className="weui-form-preview__bd">
-                      <div className="weui-form-preview__item">
-                          <label className="weui-form-preview__label">地址</label>
-                          <span className="weui-form-preview__value">{this.props.item.address}</span>
-                      </div>
-                      <div className="weui-form-preview__item">
-                          <label className="weui-form-preview__label">联系电话</label>
-                          <span className="weui-form-preview__value">{this.props.item.mobile}</span>
-                      </div>
-                      <div className="weui-form-preview__item">
-                          <label className="weui-form-preview__label">联系姓名</label>
-                          <span className="weui-form-preview__value">{this.props.item.link_name}</span>
-                      </div>
-                      <div className="weui-form-preview__item">
-                          <label className="weui-form-preview__label">计划工作时间</label>
-                          <span className="weui-form-preview__value">{this.props.item.working_hours}小时</span>
-                      </div>
-                      <div className="weui-form-preview__item">
-                          <label className="weui-form-preview__label">操作员</label>
-                          <span className="weui-form-preview__value">{this.props.item.address}</span>
-                      </div>
-
-                      <div className="weui-form-preview__item">
-                          <label className="weui-form-preview__label">任务描述</label>
-                          <span className="weui-form-preview__value">{this.props.item.task_desc}</span>
-                      </div>
+            <div className="task_infor task_ul">
+              <div className="weui-form-preview">
+                <div className="weui-form-preview__hd">
+                    <div className="weui-form-preview__item">
+                        <label className="weui-form-preview__label">{this.props.item.deadline}</label>
+                        <em className="weui-form-preview__value animation">{this.props.item.state}<span className="glyphicon glyphicon-pencil modify_left" aria-hidden="true" data-modify={this.props.item.id} onClick={this.handClick2}></span></em>
+                    </div>
+                </div>
+                <div className="weui-form-preview__bd">
+                    <div className="weui-form-preview__item">
+                        <label className="weui-form-preview__label">地址</label>
+                        <span className="weui-form-preview__value">{this.props.item.address}</span>
+                    </div>
+                    <div className="weui-form-preview__item">
+                        <label className="weui-form-preview__label">联系电话</label>
+                        <span className="weui-form-preview__value">{this.props.item.mobile}</span>
+                    </div>
+                    <div className="weui-form-preview__item">
+                        <label className="weui-form-preview__label">联系姓名</label>
+                        <span className="weui-form-preview__value">{this.props.item.link_name}</span>
+                    </div>
+                    <div className="weui-form-preview__item">
+                        <label className="weui-form-preview__label">计划工作时间</label>
+                        <span className="weui-form-preview__value">{this.props.item.working_hours}小时</span>
+                    </div>
+                    <div className="weui-form-preview__item">
+                        <label className="weui-form-preview__label">操作员</label>
+                        <span className="weui-form-preview__value" >
+                          {workers}
+                        </span>
                     </div>
 
-                    <div className="weui-form-preview__ft">
-                        <button type="submit"  className="weui-form-preview__btn weui-form-preview__btn_default" data-role={this.props.item.id} onClick={this.handClick}>删除</button>
-                        <button type="submit" className="weui-form-preview__btn weui-form-preview__btn_primary">分配</button>
+                    <div className="weui-form-preview__item">
+                        <label className="weui-form-preview__label">任务描述</label>
+                        <span className="weui-form-preview__value">{this.props.item.task_desc}</span>
                     </div>
                   </div>
-                <br/>
-              </li>
 
-          </ul>
-        );
-    }
-};
-
-// 选择操作员
-class Caozuoyuan extends React.Component {
-    constructor(props) {
-        super(props);
-        this.handClick=this.handClick.bind(this);
-        this.state={status:"0"};
-    }
-    componentDidMount(){
-    }
-    handClick(e){
-      var id = e.target.id;
-
-      if(id=="caozuoyuan_name_1"){
-        var caozuoyuan1 = $(".caozuoyuan_span1").html();
-        var name1 = $.inArray(caozuoyuan1, nameArray);
-        if(name1<0){
-          nameArray.push(caozuoyuan1);
-          console.log(nameArray);
-          $("#showcaozuoyuan").html(nameArray);
-        }else {
-          nameArray.splice(name1,1);
-          console.log(nameArray);
-          $("#showcaozuoyuan").html(nameArray);
-        }
-      }else if (id=="caozuoyuan_name_2") {
-        var caozuoyuan2 = $(".caozuoyuan_span2").html();
-        var name2 = $.inArray(caozuoyuan2, nameArray);
-        if(name2<0){
-          nameArray.push(caozuoyuan2);
-          console.log(nameArray);
-          $("#showcaozuoyuan").html(nameArray);
-        }else {
-          nameArray.splice(name2,1);
-          console.log(nameArray);
-          $("#showcaozuoyuan").html(nameArray);
-        }
-      }else if (id=="caozuoyuan_name_3") {
-        var caozuoyuan3 = $(".caozuoyuan_span3").html();
-        var name3 = $.inArray(caozuoyuan3, nameArray);
-        if(name3<0){
-          nameArray.push(caozuoyuan3);
-          console.log(nameArray);
-        }else {
-          nameArray.splice(name3,1);
-          console.log(nameArray);
-        }
-
-      }
-      $("#showcaozuoyuan").val(nameArray.join(" / "));
-    }
-    render() {
-        var style={display: "none"};
-        return (
-          <div className="weui-skin_android" id="caozuoyuan" style={style}>
-              <div className="weui-mask"></div>
-              <div className="weui-actionsheet">
-                  <div className="weui-actionsheet__menu">
-                  <div className="weui-cells weui-cells_checkbox">
-                      <label className="weui-cell weui-check__label">
-                          <div className="weui-cell__hd">
-                              <input type="checkbox" className="weui-check" name="checkbox1" />
-                              <i className="weui-icon-checked vertical_align"   id="caozuoyuan_name_1" onClick={this.handClick}></i>
-                          </div>
-                          <div className="weui-cell__bd">
-                              <p><span className="caozuoyuan_span1">张三</span> <span>挖土工</span> <span>5 级</span></p>
-                              <p>待安装：3</p>
-                          </div>
-                      </label>
-
-                      <label className="weui-cell weui-check__label">
-                          <div className="weui-cell__hd">
-                              <input type="checkbox" className="weui-check" name="checkbox1"/>
-                              <i className="weui-icon-checked vertical_align"  id="caozuoyuan_name_2" onClick={this.handClick}></i>
-                          </div>
-                          <div className="weui-cell__bd">
-                              <p><span  className="caozuoyuan_span2">李四</span> <span>平土工</span> <span>8 级</span></p>
-                          </div>
-                      </label>
-
-                      <label className="weui-cell weui-check__label">
-                          <div className="weui-cell__hd">
-                              <input type="checkbox" className="weui-check" name="checkbox1"/>
-                              <i className="weui-icon-checked vertical_align"  id="caozuoyuan_name_3" onClick={this.handClick}></i>
-                          </div>
-                          <div className="weui-cell__bd">
-                              <p><span  className="caozuoyuan_span3">王五</span> <span>瓦工</span> <span>6 级</span></p>
-                          </div>
-                      </label>
+                  <div className="weui-form-preview__ft">
+                      <button type="submit"  className="weui-form-preview__btn weui-form-preview__btn_default" data-role={this.props.item.id} onClick={this.handClick}>删除</button>
+                      <button type="submit" className="weui-form-preview__btn weui-form-preview__btn_primary showcaozuoyuan" id={"showcaozuoyuan"+this.props.index} data-rose={this.props.item.id} onClick={this.handClick1}>分配</button>
                   </div>
-                  </div>
-              </div>
+                </div>
+              <br/>
+
           </div>
         );
     }
 };
+
+
 
 // 返回到页面
 ReactDOM.render(
