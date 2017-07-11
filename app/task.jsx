@@ -11,6 +11,7 @@ class Wrap extends React.Component {
         this.handClick2=this.handClick2.bind(this);
         this.handClick3=this.handClick3.bind(this);
         this.handClick4=this.handClick4.bind(this);
+        this.handClick5=this.handClick5.bind(this);
         this.rowData=this.rowData.bind(this);
         this.modifyGet=this.modifyGet.bind(this);
         this.state={taskitem:[],worksitem:[],nameId:[],m_worker:{},workInfor:{}};
@@ -172,6 +173,10 @@ class Wrap extends React.Component {
       });
     }
 
+    handClick5(e){
+      $("#caozuoyuan").fadeOut(200);
+    }
+
     render() {
       var style={display: "none"};
 
@@ -275,7 +280,8 @@ class Wrap extends React.Component {
                             </label>))
                           }
                           <div className="weui-form-preview__ft workfile">
-                              <span className="weui-form-preview__btn weui-form-preview__btn_primary" onClick={this.handClick3}>确认</span>
+                              <button type="submit"  className="weui-form-preview__btn weui-form-preview__btn_default" onClick={this.handClick5}>取消</button>
+                              <button type="submit" className="weui-form-preview__btn weui-form-preview__btn_primary showcaozuoyuan" onClick={this.handClick3}>确认</button>·
                           </div>
                       </div>
                       </div>
@@ -358,6 +364,7 @@ class Task extends React.Component {
       this.props.modifyGet();
       $("#modify_alert").fadeIn(200);
     }
+    // 删除任务
     handClick(e){
       var id = $(e.target).data("role");
       $.ajax({

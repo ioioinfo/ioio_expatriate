@@ -22047,6 +22047,7 @@ var Wrap = function (_React$Component) {
         _this.handClick2 = _this.handClick2.bind(_this);
         _this.handClick3 = _this.handClick3.bind(_this);
         _this.handClick4 = _this.handClick4.bind(_this);
+        _this.handClick5 = _this.handClick5.bind(_this);
         _this.rowData = _this.rowData.bind(_this);
         _this.modifyGet = _this.modifyGet.bind(_this);
         _this.state = { taskitem: [], worksitem: [], nameId: [], m_worker: {}, workInfor: {} };
@@ -22215,6 +22216,11 @@ var Wrap = function (_React$Component) {
                 }.bind(this),
                 error: function (xhr, status, err) {}.bind(this)
             });
+        }
+    }, {
+        key: 'handClick5',
+        value: function handClick5(e) {
+            $("#caozuoyuan").fadeOut(200);
         }
     }, {
         key: 'render',
@@ -22430,10 +22436,16 @@ var Wrap = function (_React$Component) {
                                     'div',
                                     { className: 'weui-form-preview__ft workfile' },
                                     React.createElement(
-                                        'span',
-                                        { className: 'weui-form-preview__btn weui-form-preview__btn_primary', onClick: this.handClick3 },
+                                        'button',
+                                        { type: 'submit', className: 'weui-form-preview__btn weui-form-preview__btn_default', onClick: this.handClick5 },
+                                        '\u53D6\u6D88'
+                                    ),
+                                    React.createElement(
+                                        'button',
+                                        { type: 'submit', className: 'weui-form-preview__btn weui-form-preview__btn_primary showcaozuoyuan', onClick: this.handClick3 },
                                         '\u786E\u8BA4'
-                                    )
+                                    ),
+                                    '\xB7'
                                 )
                             )
                         )
@@ -22604,6 +22616,8 @@ var Task = function (_React$Component2) {
             this.props.modifyGet();
             $("#modify_alert").fadeIn(200);
         }
+        // 删除任务
+
     }, {
         key: 'handClick',
         value: function handClick(e) {
