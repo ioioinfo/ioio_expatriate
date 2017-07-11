@@ -13,26 +13,37 @@
  └──────────────────────────────────────────────────────────────┘
 */
 
-exports.register = function(server, options, next){
+var _ = require('lodash');
+var eventproxy = require('eventproxy');
+const util = require('util');
+const uu_request = require('../utils/uu_request');
 
-    var load_module = function(key, path) {
-        var module = require(path)(server);
-        if (typeof module.init === 'function') { module.init(); }
-        if (typeof module.refresh === 'function') { module.refresh(); }
-        server.expose(key, module);
+var host = "http://211.149.248.241:16010/";
+
+var nav = function(server) {
+    return {
+        save_task: function(options,cb) {
+            var url = host + "outside_task/save_task";
+            var data = options;
+
+            uu_request.request(url, data, function(err, response, body) {
+                if (!err && response.statusCode === 200) {
+                    cb(err,body);
+                } else {
+                    cb(true,{message:"网络错误"});
+                }
+            });
+        },
+        
+        //工人列表
+        list_worker: function(cb) {
+            var url = host + "worker/list_worker";
+            
+            uu_request.do_get_method(url,function(err,content) {
+                cb(err,content)
+            });
+        },
     };
-
-    load_module('person', './person.js');
-    load_module('things', './things.js');
-    load_module('amap', './amap.js');
-    load_module('wx_api', './wx_api.js');
-    load_module('fsm', './fsm.js');
-    load_module('task', './task.js');
-    load_module('hr', './hr.js');
-  
-    next();
-}
-
-exports.register.attributes = {
-    name: 'services'
 };
+
+module.exports = nav;
