@@ -22043,12 +22043,69 @@ var Wrap = function (_React$Component) {
         var _this = _possibleConstructorReturn(this, (Wrap.__proto__ || Object.getPrototypeOf(Wrap)).call(this, props));
 
         _this.handClick = _this.handClick.bind(_this);
+        _this.handClick1 = _this.handClick1.bind(_this);
+        _this.handClick2 = _this.handClick2.bind(_this);
+        _this.handClick3 = _this.handClick3.bind(_this);
+        _this.handClick4 = _this.handClick4.bind(_this);
         _this.rowData = _this.rowData.bind(_this);
-        _this.state = { taskitem: [] };
+        _this.modifyGet = _this.modifyGet.bind(_this);
+        _this.state = { taskitem: [], worksitem: [], nameId: [], m_worker: {}, workInfor: {} };
         return _this;
     }
 
     _createClass(Wrap, [{
+        key: 'handClick4',
+        value: function handClick4(e) {
+            var working_hours = $(".working_hours1").val();
+            var deadline = $(".deadline1").val();
+            var address = $(".address1").val();
+            var link_name = $(".link_name1").val();
+            var mobile = $(".mobile1").val();
+            var task_desc = $(".task_desc1").val();
+            $.ajax({
+                url: "/save_task",
+                dataType: 'json',
+                type: 'POST',
+                data: { "id": modifyId, "working_hours": working_hours, "deadline": deadline,
+                    "address": address, "link_name": link_name, "mobile": mobile,
+                    "task_desc": task_desc },
+                success: function (data) {
+                    if (data.success) {
+                        this.rowData();
+                        $("#modify_alert").fadeOut(200);
+                    } else {
+                        alert("保存失败！");
+                    }
+                }.bind(this),
+                error: function (xhr, status, err) {}.bind(this)
+            });
+        }
+    }, {
+        key: 'handClick2',
+        value: function handClick2(e) {
+            $("#modify_alert").fadeOut(200);
+        }
+
+        // 修改
+
+    }, {
+        key: 'modifyGet',
+        value: function modifyGet() {
+            $.ajax({
+                url: "/get_by_id",
+                dataType: 'json',
+                type: 'GET',
+                data: { "id": modifyId },
+                success: function (data) {
+                    this.setState({ workInfor: data.rows[0] });
+                }.bind(this),
+                error: function (xhr, status, err) {}.bind(this)
+            });
+        }
+
+        // 保存新建
+
+    }, {
         key: 'handClick',
         value: function handClick() {
             var working_hours = $(".working_hours").val();
@@ -22074,6 +22131,9 @@ var Wrap = function (_React$Component) {
                 error: function (xhr, status, err) {}.bind(this)
             });
         }
+
+        // 任务列表
+
     }, {
         key: 'rowData',
         value: function rowData() {
@@ -22083,7 +22143,12 @@ var Wrap = function (_React$Component) {
                 type: 'GET',
                 data: {},
                 success: function (data) {
-                    this.setState({ taskitem: data.rows });
+                    var list = data.rows;
+                    if (!list) {
+
+                        $(".no_task").css("display", "block");
+                    }
+                    this.setState({ taskitem: list, m_worker: data.m_worker });
                 }.bind(this),
                 error: function (xhr, status, err) {}.bind(this)
             });
@@ -22091,7 +22156,65 @@ var Wrap = function (_React$Component) {
     }, {
         key: 'componentDidMount',
         value: function componentDidMount() {
+            $.ajax({
+                url: "/list_worker",
+                dataType: 'json',
+                type: 'GET',
+                data: {},
+                success: function (data) {
+                    this.setState({ worksitem: data.rows });
+                }.bind(this),
+                error: function (xhr, status, err) {}.bind(this)
+            });
+
             this.rowData();
+        }
+
+        // 工人id
+
+    }, {
+        key: 'handClick1',
+        value: function handClick1(e) {
+            var id = e.target.id;
+            var index = $(e.target).data("role");
+            var caozuoyuan_name = "caozuoyuan_name_" + index;
+            var nameId = this.state.nameId;
+            if (id == caozuoyuan_name) {
+                var l = this.state.worksitem[index].id;
+                var caozuoyuan = $(".caozuoyuan_span" + index).html();
+                var name = $.inArray(l, nameId);
+                if (name < 0) {
+                    nameId.push(l);
+                    this.setState({ nameId: nameId });
+                } else {
+                    nameId.splice(name, 1);
+                    this.setState({ nameId: nameId });
+                }
+            }
+        }
+        // 分配功能
+
+    }, {
+        key: 'handClick3',
+        value: function handClick3(e) {
+            var nameId = this.state.nameId;
+            $.ajax({
+                url: "/assign_worker",
+                dataType: 'json',
+                type: 'POST',
+                data: { "id": task_id, "workers": JSON.stringify(nameId) },
+                success: function (data) {
+                    if (data.success) {
+                        var $caozuoyuan = $('#caozuoyuan');
+                        $caozuoyuan.fadeOut(200);
+                        this.rowData();
+                        alert("分配成功！");
+                    } else {
+                        alert("分配失败！");
+                    }
+                }.bind(this),
+                error: function (xhr, status, err) {}.bind(this)
+            });
         }
     }, {
         key: 'render',
@@ -22099,11 +22222,26 @@ var Wrap = function (_React$Component) {
             var _this2 = this;
 
             var style = { display: "none" };
+
+            var working_hours1 = this.state.workInfor.working_hours;
+            var deadline1 = this.state.workInfor.deadline;
+            var address1 = this.state.workInfor.address;
+            var link_name = this.state.workInfor.link_name;
+            var mobile1 = this.state.workInfor.mobile;
+            var task_desc1 = this.state.workInfor.task_desc;
+
+            $(".working_hours1").val(working_hours1);
+            $(".deadline1").val(deadline1);
+            $(".address1").val(address1);
+            $(".link_name1").val(link_name);
+            $(".mobile1").val(mobile1);
+            $(".task_desc1").val(task_desc1);
+
             return React.createElement(
                 'div',
                 { className: 'wrap' },
                 this.state.taskitem.map(function (item, index) {
-                    return React.createElement(Task, { item: item, key: item.id, index: index, rowData: _this2.rowData });
+                    return React.createElement(Task, { item: item, key: item.id, m_worker: _this2.state.m_worker, index: index, rowData: _this2.rowData, modifyGet: _this2.modifyGet });
                 }),
                 React.createElement('div', { className: 'background' }),
                 React.createElement(
@@ -22227,7 +22365,7 @@ var Wrap = function (_React$Component) {
                             React.createElement(
                                 'div',
                                 { className: 'weui-cell__bd' },
-                                React.createElement('input', { className: 'weui-input', placeholder: '\u70B9\u51FB\u9009\u62E9\u64CD\u4F5C\u5458', id: 'showcaozuoyuan', readOnly: true })
+                                React.createElement('input', { className: 'weui-input', placeholder: '\u70B9\u51FB\u9009\u62E9\u64CD\u4F5C\u5458', readOnly: true })
                             )
                         ),
                         React.createElement(
@@ -22250,7 +22388,184 @@ var Wrap = function (_React$Component) {
                         )
                     )
                 ),
-                React.createElement(Caozuoyuan, null)
+                React.createElement(
+                    'div',
+                    { className: 'weui-skin_android', id: 'caozuoyuan', style: style },
+                    React.createElement('div', { className: 'weui-mask', onClick: this.handClick2 }),
+                    React.createElement(
+                        'div',
+                        { className: 'weui-actionsheet' },
+                        React.createElement(
+                            'div',
+                            { className: 'weui-actionsheet__menu' },
+                            React.createElement(
+                                'div',
+                                { className: 'weui-cells weui-cells_checkbox' },
+                                this.state.worksitem.map(function (item, index) {
+                                    return React.createElement(
+                                        'label',
+                                        { className: 'weui-cell weui-check__label', key: item.id },
+                                        React.createElement(
+                                            'div',
+                                            { className: 'weui-cell__hd' },
+                                            React.createElement('input', { type: 'checkbox', className: 'weui-check', name: 'checkbox1' }),
+                                            React.createElement('i', { className: 'weui-icon-checked vertical_align', id: "caozuoyuan_name_" + index, 'data-role': index, onClick: _this2.handClick1 })
+                                        ),
+                                        React.createElement(
+                                            'div',
+                                            { className: 'weui-cell__bd' },
+                                            React.createElement(
+                                                'p',
+                                                null,
+                                                React.createElement(
+                                                    'span',
+                                                    { className: "caozuoyuan_span" + index },
+                                                    item.worker_name
+                                                )
+                                            )
+                                        )
+                                    );
+                                }),
+                                React.createElement(
+                                    'div',
+                                    { className: 'weui-form-preview__ft workfile' },
+                                    React.createElement(
+                                        'span',
+                                        { className: 'weui-form-preview__btn weui-form-preview__btn_primary', onClick: this.handClick3 },
+                                        '\u786E\u8BA4'
+                                    )
+                                )
+                            )
+                        )
+                    )
+                ),
+                React.createElement(
+                    'div',
+                    { className: 'js_dialog', id: 'modify_alert', style: style },
+                    React.createElement('div', { className: 'weui-mask' }),
+                    React.createElement(
+                        'div',
+                        { className: 'weui-dialog' },
+                        React.createElement(
+                            'div',
+                            { className: 'weui-cell' },
+                            React.createElement(
+                                'div',
+                                { className: 'weui-cell__hd' },
+                                React.createElement(
+                                    'label',
+                                    { className: 'weui-label' },
+                                    '\u5730\u5740'
+                                )
+                            ),
+                            React.createElement(
+                                'div',
+                                { className: 'weui-cell__bd' },
+                                React.createElement('input', { className: 'weui-input address1', type: 'text', placeholder: '\u8BF7\u8F93\u5165\u5B89\u88C5\u5730\u5740' })
+                            )
+                        ),
+                        React.createElement(
+                            'div',
+                            { className: 'weui-cell' },
+                            React.createElement(
+                                'div',
+                                { className: 'weui-cell__hd' },
+                                React.createElement(
+                                    'label',
+                                    { className: 'weui-label' },
+                                    '\u8054\u7CFB\u59D3\u540D'
+                                )
+                            ),
+                            React.createElement(
+                                'div',
+                                { className: 'weui-cell__bd' },
+                                React.createElement('input', { className: 'weui-input link_name1', type: 'text', placeholder: '\u8BF7\u8F93\u5165\u5BA2\u6237\u59D3\u540D' })
+                            )
+                        ),
+                        React.createElement(
+                            'div',
+                            { className: 'weui-cell' },
+                            React.createElement(
+                                'div',
+                                { className: 'weui-cell__hd' },
+                                React.createElement(
+                                    'label',
+                                    { className: 'weui-label' },
+                                    '\u8054\u7CFB\u7535\u8BDD'
+                                )
+                            ),
+                            React.createElement(
+                                'div',
+                                { className: 'weui-cell__bd' },
+                                React.createElement('input', { className: 'weui-input mobile1', type: 'text', placeholder: '\u8BF7\u8F93\u5165\u5BA2\u6237\u624B\u673A\u53F7' })
+                            )
+                        ),
+                        React.createElement(
+                            'div',
+                            { className: 'weui-cell' },
+                            React.createElement(
+                                'div',
+                                { className: 'weui-cell__hd' },
+                                React.createElement(
+                                    'label',
+                                    { className: 'weui-label' },
+                                    '\u8BA1\u5212\u5DE5\u4F5C\u65F6\u957F'
+                                )
+                            ),
+                            React.createElement(
+                                'div',
+                                { className: 'weui-cell__bd' },
+                                React.createElement('input', { className: 'weui-input working_hours1', type: 'text', placeholder: '\u8BF7\u8F93\u5165\u9884\u8BA1\u5DE5\u4F5C\u65F6\u957F/h' })
+                            )
+                        ),
+                        React.createElement(
+                            'div',
+                            { className: 'weui-cell' },
+                            React.createElement(
+                                'div',
+                                { className: 'weui-cell__hd' },
+                                React.createElement(
+                                    'label',
+                                    { className: 'weui-label' },
+                                    '\u9884\u8BA1\u5B8C\u6210\u65F6\u95F4'
+                                )
+                            ),
+                            React.createElement(
+                                'div',
+                                { className: 'weui-cell__bd' },
+                                React.createElement('input', { className: 'weui-input form_datetime deadline1', type: 'text', placeholder: '', readOnly: true })
+                            )
+                        ),
+                        React.createElement(
+                            'div',
+                            { className: 'weui-cell' },
+                            React.createElement(
+                                'div',
+                                { className: 'weui-cell__bd' },
+                                React.createElement('textarea', { className: 'weui-textarea task_desc1', placeholder: '\u4EFB\u52A1\u63CF\u8FF0', rows: '3' })
+                            )
+                        ),
+                        React.createElement(
+                            'div',
+                            { className: 'weui-form-preview__ft' },
+                            React.createElement(
+                                'button',
+                                { type: 'submit', className: 'weui-form-preview__btn weui-form-preview__btn_default', onClick: this.handClick2 },
+                                '\u53D6\u6D88'
+                            ),
+                            React.createElement(
+                                'button',
+                                { type: 'submit', className: 'weui-form-preview__btn weui-form-preview__btn_primary showcaozuoyuan', onClick: this.handClick4 },
+                                '\u786E\u8BA4'
+                            )
+                        )
+                    )
+                ),
+                React.createElement(
+                    'p',
+                    { className: 'no_task' },
+                    '\u6293\u7D27\u65B0\u5EFA\u4EFB\u52A1\u5427\uFF01'
+                )
             );
         }
     }]);
@@ -22269,10 +22584,27 @@ var Task = function (_React$Component2) {
         var _this3 = _possibleConstructorReturn(this, (Task.__proto__ || Object.getPrototypeOf(Task)).call(this, props));
 
         _this3.handClick = _this3.handClick.bind(_this3);
+        _this3.handClick1 = _this3.handClick1.bind(_this3);
+        _this3.handClick2 = _this3.handClick2.bind(_this3);
+        _this3.state = {};
         return _this3;
     }
 
     _createClass(Task, [{
+        key: 'handClick1',
+        value: function handClick1(e) {
+            task_id = $(e.target).data("rose");
+            var $caozuoyuan = $('#caozuoyuan');
+            $caozuoyuan.fadeIn(200);
+        }
+    }, {
+        key: 'handClick2',
+        value: function handClick2(e) {
+            modifyId = $(e.target).data("modify");
+            this.props.modifyGet();
+            $("#modify_alert").fadeIn(200);
+        }
+    }, {
         key: 'handClick',
         value: function handClick(e) {
             var id = $(e.target).data("role");
@@ -22298,345 +22630,159 @@ var Task = function (_React$Component2) {
     }, {
         key: 'render',
         value: function render() {
+            var _this4 = this;
+
+            var workers = React.createElement('span', null);
+            if (this.props.item.workers) {
+                workers = React.createElement(
+                    'span',
+                    null,
+                    this.props.item.workers.map(function (item) {
+                        return React.createElement(
+                            'span',
+                            { key: item },
+                            _this4.props.m_worker[item],
+                            ' /'
+                        );
+                    })
+                );
+            }
 
             return React.createElement(
-                'ul',
+                'div',
                 { className: 'task_infor task_ul' },
                 React.createElement(
-                    'li',
-                    null,
+                    'div',
+                    { className: 'weui-form-preview' },
                     React.createElement(
                         'div',
-                        { className: 'weui-form-preview' },
+                        { className: 'weui-form-preview__hd' },
                         React.createElement(
                             'div',
-                            { className: 'weui-form-preview__hd' },
+                            { className: 'weui-form-preview__item' },
                             React.createElement(
-                                'div',
-                                { className: 'weui-form-preview__item' },
-                                React.createElement(
-                                    'label',
-                                    { className: 'weui-form-preview__label' },
-                                    this.props.item.deadline
-                                ),
-                                React.createElement(
-                                    'em',
-                                    { className: 'weui-form-preview__value animation' },
-                                    this.props.item.state,
-                                    React.createElement('span', { className: 'glyphicon glyphicon-pencil modify_left', 'aria-hidden': 'true' })
-                                )
-                            )
-                        ),
-                        React.createElement(
-                            'div',
-                            { className: 'weui-form-preview__bd' },
-                            React.createElement(
-                                'div',
-                                { className: 'weui-form-preview__item' },
-                                React.createElement(
-                                    'label',
-                                    { className: 'weui-form-preview__label' },
-                                    '\u5730\u5740'
-                                ),
-                                React.createElement(
-                                    'span',
-                                    { className: 'weui-form-preview__value' },
-                                    this.props.item.address
-                                )
+                                'label',
+                                { className: 'weui-form-preview__label' },
+                                this.props.item.deadline
                             ),
                             React.createElement(
-                                'div',
-                                { className: 'weui-form-preview__item' },
-                                React.createElement(
-                                    'label',
-                                    { className: 'weui-form-preview__label' },
-                                    '\u8054\u7CFB\u7535\u8BDD'
-                                ),
-                                React.createElement(
-                                    'span',
-                                    { className: 'weui-form-preview__value' },
-                                    this.props.item.mobile
-                                )
-                            ),
-                            React.createElement(
-                                'div',
-                                { className: 'weui-form-preview__item' },
-                                React.createElement(
-                                    'label',
-                                    { className: 'weui-form-preview__label' },
-                                    '\u8054\u7CFB\u59D3\u540D'
-                                ),
-                                React.createElement(
-                                    'span',
-                                    { className: 'weui-form-preview__value' },
-                                    this.props.item.link_name
-                                )
-                            ),
-                            React.createElement(
-                                'div',
-                                { className: 'weui-form-preview__item' },
-                                React.createElement(
-                                    'label',
-                                    { className: 'weui-form-preview__label' },
-                                    '\u8BA1\u5212\u5DE5\u4F5C\u65F6\u95F4'
-                                ),
-                                React.createElement(
-                                    'span',
-                                    { className: 'weui-form-preview__value' },
-                                    this.props.item.working_hours,
-                                    '\u5C0F\u65F6'
-                                )
-                            ),
-                            React.createElement(
-                                'div',
-                                { className: 'weui-form-preview__item' },
-                                React.createElement(
-                                    'label',
-                                    { className: 'weui-form-preview__label' },
-                                    '\u64CD\u4F5C\u5458'
-                                ),
-                                React.createElement(
-                                    'span',
-                                    { className: 'weui-form-preview__value' },
-                                    this.props.item.address
-                                )
-                            ),
-                            React.createElement(
-                                'div',
-                                { className: 'weui-form-preview__item' },
-                                React.createElement(
-                                    'label',
-                                    { className: 'weui-form-preview__label' },
-                                    '\u4EFB\u52A1\u63CF\u8FF0'
-                                ),
-                                React.createElement(
-                                    'span',
-                                    { className: 'weui-form-preview__value' },
-                                    this.props.item.task_desc
-                                )
-                            )
-                        ),
-                        React.createElement(
-                            'div',
-                            { className: 'weui-form-preview__ft' },
-                            React.createElement(
-                                'button',
-                                { type: 'submit', className: 'weui-form-preview__btn weui-form-preview__btn_default', 'data-role': this.props.item.id, onClick: this.handClick },
-                                '\u5220\u9664'
-                            ),
-                            React.createElement(
-                                'button',
-                                { type: 'submit', className: 'weui-form-preview__btn weui-form-preview__btn_primary' },
-                                '\u5206\u914D'
+                                'em',
+                                { className: 'weui-form-preview__value animation' },
+                                this.props.item.state,
+                                React.createElement('span', { className: 'glyphicon glyphicon-pencil modify_left', 'aria-hidden': 'true', 'data-modify': this.props.item.id, onClick: this.handClick2 })
                             )
                         )
                     ),
-                    React.createElement('br', null)
-                )
+                    React.createElement(
+                        'div',
+                        { className: 'weui-form-preview__bd' },
+                        React.createElement(
+                            'div',
+                            { className: 'weui-form-preview__item' },
+                            React.createElement(
+                                'label',
+                                { className: 'weui-form-preview__label' },
+                                '\u5730\u5740'
+                            ),
+                            React.createElement(
+                                'span',
+                                { className: 'weui-form-preview__value' },
+                                this.props.item.address
+                            )
+                        ),
+                        React.createElement(
+                            'div',
+                            { className: 'weui-form-preview__item' },
+                            React.createElement(
+                                'label',
+                                { className: 'weui-form-preview__label' },
+                                '\u8054\u7CFB\u7535\u8BDD'
+                            ),
+                            React.createElement(
+                                'span',
+                                { className: 'weui-form-preview__value' },
+                                this.props.item.mobile
+                            )
+                        ),
+                        React.createElement(
+                            'div',
+                            { className: 'weui-form-preview__item' },
+                            React.createElement(
+                                'label',
+                                { className: 'weui-form-preview__label' },
+                                '\u8054\u7CFB\u59D3\u540D'
+                            ),
+                            React.createElement(
+                                'span',
+                                { className: 'weui-form-preview__value' },
+                                this.props.item.link_name
+                            )
+                        ),
+                        React.createElement(
+                            'div',
+                            { className: 'weui-form-preview__item' },
+                            React.createElement(
+                                'label',
+                                { className: 'weui-form-preview__label' },
+                                '\u8BA1\u5212\u5DE5\u4F5C\u65F6\u95F4'
+                            ),
+                            React.createElement(
+                                'span',
+                                { className: 'weui-form-preview__value' },
+                                this.props.item.working_hours,
+                                '\u5C0F\u65F6'
+                            )
+                        ),
+                        React.createElement(
+                            'div',
+                            { className: 'weui-form-preview__item' },
+                            React.createElement(
+                                'label',
+                                { className: 'weui-form-preview__label' },
+                                '\u64CD\u4F5C\u5458'
+                            ),
+                            React.createElement(
+                                'span',
+                                { className: 'weui-form-preview__value' },
+                                workers
+                            )
+                        ),
+                        React.createElement(
+                            'div',
+                            { className: 'weui-form-preview__item' },
+                            React.createElement(
+                                'label',
+                                { className: 'weui-form-preview__label' },
+                                '\u4EFB\u52A1\u63CF\u8FF0'
+                            ),
+                            React.createElement(
+                                'span',
+                                { className: 'weui-form-preview__value' },
+                                this.props.item.task_desc
+                            )
+                        )
+                    ),
+                    React.createElement(
+                        'div',
+                        { className: 'weui-form-preview__ft' },
+                        React.createElement(
+                            'button',
+                            { type: 'submit', className: 'weui-form-preview__btn weui-form-preview__btn_default', 'data-role': this.props.item.id, onClick: this.handClick },
+                            '\u5220\u9664'
+                        ),
+                        React.createElement(
+                            'button',
+                            { type: 'submit', className: 'weui-form-preview__btn weui-form-preview__btn_primary showcaozuoyuan', id: "showcaozuoyuan" + this.props.index, 'data-rose': this.props.item.id, onClick: this.handClick1 },
+                            '\u5206\u914D'
+                        )
+                    )
+                ),
+                React.createElement('br', null)
             );
         }
     }]);
 
     return Task;
-}(React.Component);
-
-;
-
-// 选择操作员
-
-var Caozuoyuan = function (_React$Component3) {
-    _inherits(Caozuoyuan, _React$Component3);
-
-    function Caozuoyuan(props) {
-        _classCallCheck(this, Caozuoyuan);
-
-        var _this4 = _possibleConstructorReturn(this, (Caozuoyuan.__proto__ || Object.getPrototypeOf(Caozuoyuan)).call(this, props));
-
-        _this4.handClick = _this4.handClick.bind(_this4);
-        _this4.state = { status: "0" };
-        return _this4;
-    }
-
-    _createClass(Caozuoyuan, [{
-        key: 'componentDidMount',
-        value: function componentDidMount() {}
-    }, {
-        key: 'handClick',
-        value: function handClick(e) {
-            var id = e.target.id;
-
-            if (id == "caozuoyuan_name_1") {
-                var caozuoyuan1 = $(".caozuoyuan_span1").html();
-                var name1 = $.inArray(caozuoyuan1, nameArray);
-                if (name1 < 0) {
-                    nameArray.push(caozuoyuan1);
-                    console.log(nameArray);
-                    $("#showcaozuoyuan").html(nameArray);
-                } else {
-                    nameArray.splice(name1, 1);
-                    console.log(nameArray);
-                    $("#showcaozuoyuan").html(nameArray);
-                }
-            } else if (id == "caozuoyuan_name_2") {
-                var caozuoyuan2 = $(".caozuoyuan_span2").html();
-                var name2 = $.inArray(caozuoyuan2, nameArray);
-                if (name2 < 0) {
-                    nameArray.push(caozuoyuan2);
-                    console.log(nameArray);
-                    $("#showcaozuoyuan").html(nameArray);
-                } else {
-                    nameArray.splice(name2, 1);
-                    console.log(nameArray);
-                    $("#showcaozuoyuan").html(nameArray);
-                }
-            } else if (id == "caozuoyuan_name_3") {
-                var caozuoyuan3 = $(".caozuoyuan_span3").html();
-                var name3 = $.inArray(caozuoyuan3, nameArray);
-                if (name3 < 0) {
-                    nameArray.push(caozuoyuan3);
-                    console.log(nameArray);
-                } else {
-                    nameArray.splice(name3, 1);
-                    console.log(nameArray);
-                }
-            }
-            $("#showcaozuoyuan").val(nameArray.join(" / "));
-        }
-    }, {
-        key: 'render',
-        value: function render() {
-            var style = { display: "none" };
-            return React.createElement(
-                'div',
-                { className: 'weui-skin_android', id: 'caozuoyuan', style: style },
-                React.createElement('div', { className: 'weui-mask' }),
-                React.createElement(
-                    'div',
-                    { className: 'weui-actionsheet' },
-                    React.createElement(
-                        'div',
-                        { className: 'weui-actionsheet__menu' },
-                        React.createElement(
-                            'div',
-                            { className: 'weui-cells weui-cells_checkbox' },
-                            React.createElement(
-                                'label',
-                                { className: 'weui-cell weui-check__label' },
-                                React.createElement(
-                                    'div',
-                                    { className: 'weui-cell__hd' },
-                                    React.createElement('input', { type: 'checkbox', className: 'weui-check', name: 'checkbox1' }),
-                                    React.createElement('i', { className: 'weui-icon-checked vertical_align', id: 'caozuoyuan_name_1', onClick: this.handClick })
-                                ),
-                                React.createElement(
-                                    'div',
-                                    { className: 'weui-cell__bd' },
-                                    React.createElement(
-                                        'p',
-                                        null,
-                                        React.createElement(
-                                            'span',
-                                            { className: 'caozuoyuan_span1' },
-                                            '\u5F20\u4E09'
-                                        ),
-                                        ' ',
-                                        React.createElement(
-                                            'span',
-                                            null,
-                                            '\u6316\u571F\u5DE5'
-                                        ),
-                                        ' ',
-                                        React.createElement(
-                                            'span',
-                                            null,
-                                            '5 \u7EA7'
-                                        )
-                                    ),
-                                    React.createElement(
-                                        'p',
-                                        null,
-                                        '\u5F85\u5B89\u88C5\uFF1A3'
-                                    )
-                                )
-                            ),
-                            React.createElement(
-                                'label',
-                                { className: 'weui-cell weui-check__label' },
-                                React.createElement(
-                                    'div',
-                                    { className: 'weui-cell__hd' },
-                                    React.createElement('input', { type: 'checkbox', className: 'weui-check', name: 'checkbox1' }),
-                                    React.createElement('i', { className: 'weui-icon-checked vertical_align', id: 'caozuoyuan_name_2', onClick: this.handClick })
-                                ),
-                                React.createElement(
-                                    'div',
-                                    { className: 'weui-cell__bd' },
-                                    React.createElement(
-                                        'p',
-                                        null,
-                                        React.createElement(
-                                            'span',
-                                            { className: 'caozuoyuan_span2' },
-                                            '\u674E\u56DB'
-                                        ),
-                                        ' ',
-                                        React.createElement(
-                                            'span',
-                                            null,
-                                            '\u5E73\u571F\u5DE5'
-                                        ),
-                                        ' ',
-                                        React.createElement(
-                                            'span',
-                                            null,
-                                            '8 \u7EA7'
-                                        )
-                                    )
-                                )
-                            ),
-                            React.createElement(
-                                'label',
-                                { className: 'weui-cell weui-check__label' },
-                                React.createElement(
-                                    'div',
-                                    { className: 'weui-cell__hd' },
-                                    React.createElement('input', { type: 'checkbox', className: 'weui-check', name: 'checkbox1' }),
-                                    React.createElement('i', { className: 'weui-icon-checked vertical_align', id: 'caozuoyuan_name_3', onClick: this.handClick })
-                                ),
-                                React.createElement(
-                                    'div',
-                                    { className: 'weui-cell__bd' },
-                                    React.createElement(
-                                        'p',
-                                        null,
-                                        React.createElement(
-                                            'span',
-                                            { className: 'caozuoyuan_span3' },
-                                            '\u738B\u4E94'
-                                        ),
-                                        ' ',
-                                        React.createElement(
-                                            'span',
-                                            null,
-                                            '\u74E6\u5DE5'
-                                        ),
-                                        ' ',
-                                        React.createElement(
-                                            'span',
-                                            null,
-                                            '6 \u7EA7'
-                                        )
-                                    )
-                                )
-                            )
-                        )
-                    )
-                )
-            );
-        }
-    }]);
-
-    return Caozuoyuan;
 }(React.Component);
 
 ;

@@ -10,6 +10,12 @@ body,html{
   bottom: 0;
   background: #fff;
 }
+.workfile{
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
 .background{
   width: 100%;
   height: 50px;
@@ -26,6 +32,18 @@ body,html{
 }
 .weui-skin_android .weui-actionsheet{
   width: 100%;
+  background: #fff;
+  height: 100%;
+}
+.weui-label{
+  text-align: left;
+}
+.no_task{
+  font-size: 24px;
+  text-align: center;
+  margin-top: 100px;
+  color: #000;
+  display: none;
 }
 .animation{
 -webkit-animation:bounce 1s .2s ease both;
