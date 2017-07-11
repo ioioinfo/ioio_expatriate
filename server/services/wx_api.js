@@ -48,8 +48,8 @@ var nav = function(server) {
         },
         
         //获取授权网址
-        get_go2auth_url: function(platform_id,path,cb) {
-            var url = host + "get_go2auth_url?platform_id=" + platform_id + "&path=" + path;
+        get_go2auth_url: function(platform_id,m_host,path,cb) {
+            var url = host + "get_go2auth_url?platform_id=" + platform_id + "&host=" + m_host + "&path=" + path;
             uu_request.do_get_method(url, function(err, content) {
                 if (!err) {
                     cb(err,content);
