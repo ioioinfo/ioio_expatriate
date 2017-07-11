@@ -20,6 +20,7 @@ module.exports = {
         today_task: './app/today_task.jsx',
         task: './app/task.jsx',
         bind: './app/bind.jsx',
+        search: './app/search.jsx',
     },
     output: {
         path: __dirname,

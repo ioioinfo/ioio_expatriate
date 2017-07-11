@@ -24,6 +24,9 @@ body,html{
   margin-left: 7px;
   color: #E7B020;
 }
+.weui-skin_android .weui-actionsheet{
+  width: 100%;
+}
 .animation{
 -webkit-animation:bounce 1s .2s ease both;
 -moz-animation:bounce 1s .2s ease both;}
