@@ -67,12 +67,12 @@ var nav = function(server) {
         },
         
         //按个人查询任务
-        get_by_person: function(person_id,stage,cb) {
+        get_by_worker: function(worker_id,stage,cb) {
             if (!stage) {
                 stage = "";
             }
             
-            var url = host + "outside_task/get_by_id?person_id="+person_id+"&stage="+stage;
+            var url = host + "outside_task/get_by_worker?worker_id="+worker_id+"&stage="+stage;
             
             uu_request.do_get_method(url,function(err,content) {
                 cb(err,content)
@@ -85,6 +85,15 @@ var nav = function(server) {
             var data = {"id":id,"workers":workers};
             
             uu_request.do_post_method(url,data,function(err,content) {
+                cb(err,content)
+            });
+        },
+        
+        //工人当前任务量
+        worker_task_count: function(cb) {
+            var url = host + "outside_task/worker_task_count";
+            
+            uu_request.do_get_method(url,function(err,content) {
                 cb(err,content)
             });
         },

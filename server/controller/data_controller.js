@@ -23,11 +23,81 @@ var moduel_prefix = 'ioio_expatriate_data';
 exports.register = function(server, options, next) {
     var service_info = "ioio expatriate";
     
+    var person = server.plugins.services.person;
     var task = server.plugins.services.task;
     var hr = server.plugins.services.hr;
 
     var cookie_options = {ttl:10*365*24*60*60*1000};
     var cookie_key = "ioio_expatriate_cookie";
+    
+    //页面获取微信id
+    var page_get_openid = function(request,cb) {
+        var state;
+        var openid = "";
+
+        if (request.state && request.state.cookie) {
+            state = request.state.cookie;
+            if (state[cookie_key]) {
+                openid = state[cookie_key];
+            }
+        }
+        if (openid) {
+            console.log("data api cookie openid:" + openid);
+            cb(openid);
+        } else {
+            cb(null);
+        }
+    };
+    
+    //查询手机号
+    var get_mobile = function(request,cb) {
+        page_get_openid(request,function(openid) {
+            if (!openid) {
+                cb(null);
+            } else {
+                var platform_id = "worker";
+                person.get_person_wx(platform_id,openid,function(err,rows) {
+                    if (rows && rows.length > 0) {
+                        var row = rows[0];
+
+                        //查询手机号
+                        person.get_mobile(row.person_id,function(err,rows) {
+                            if (rows && rows.length > 0) {
+                                cb(rows[0].mobile);
+                            } else {
+                                cb(null);
+                            }
+                        });
+                    } else {
+                        cb(null);
+                    }
+                });
+            }
+        });
+    };
+    
+    //查询工人
+    var get_worker = function(request,cb) {
+        get_mobile(request,function(mobile) {
+            if (!mobile) {
+                cb(null);
+            } else {
+                hr.list_worker(function(err,content) {
+                    var rows = content.rows;
+                    var worker_id;
+                    
+                    _.each(rows,function(row) {
+                        if (row.mobile == mobile) {
+                            worker_id = row.id;
+                            return false;
+                        }
+                    });
+                    
+                    cb(worker_id);
+                });
+            }
+        });
+    };
     
     var list_worker = function(cb) {
         hr.list_worker(function(err,content) {
@@ -153,20 +223,21 @@ exports.register = function(server, options, next) {
             method: 'GET',
             path: '/get_by_person',
             handler: function(request,reply) {
-                var person_id = request.query.person_id;
                 var stage = request.query.stage;
                 
-                if (!person_id) {
-                    return reply({"success":false,"message":"param person_id is null","service_info":service_info});
-                }
-                
-                task.get_by_person(person_id,stage,function(err,content) {
-                    var rows = content.rows;
-                    if (!rows) {
-                        return reply({"success":true,"rows":[]});
+                get_worker(request,function(worker_id) {
+                    if (!worker_id) {
+                        return reply({"success":false,"message":"worker_id is null","service_info":service_info});
                     }
-                    list_worker(function(m_worker){
-                        return reply({"success":true,"rows":rows,"m_worker":m_worker});
+                    
+                    task.get_by_worker(worker_id,stage,function(err,content) {
+                        var rows = content.rows;
+                        if (!rows) {
+                            return reply({"success":true,"rows":[]});
+                        }
+                        list_worker(function(m_worker){
+                            return reply({"success":true,"rows":rows,"m_worker":m_worker});
+                        });
                     });
                 });
             }
@@ -195,12 +266,48 @@ exports.register = function(server, options, next) {
             }
         },
         
+        //工人当前任务量
+        {
+            method: 'GET',
+            path: '/worker_task_count',
+            handler: function(request,reply) {
+                task.worker_task_count(function(err,content) {
+                    return reply(content);
+                });
+            }
+        },
+        
+        //工人列表
         {
             method: "GET",
             path: '/list_worker',
             handler: function(request, reply) {
                 hr.list_worker(function(err,content) {
                     return reply(content);
+                });
+            }
+        },
+        
+        //工人列表加任务量
+        {
+            method: "GET",
+            path: '/list_worker_with_count',
+            handler: function(request, reply) {
+                hr.list_worker(function(err,content) {
+                    var rows = content.rows;
+                    task.worker_task_count(function(err,content) {
+                        var m_worker = content.row;
+                        
+                        _.each(rows,function(worker) {
+                            var count = m_worker[worker.id];
+                            if (!count) {
+                                count = 0;
+                            }
+                            worker.count = count;
+                        });
+                        
+                        return reply({"success":true,"message":"ok","rows":rows});
+                    });
                 });
             }
         },

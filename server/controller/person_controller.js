@@ -18,7 +18,7 @@ var r = require('request');
 var moment = require('moment');
 var eventproxy = require('eventproxy');
 
-var moduel_prefix = '4s_mp_web_person';
+var moduel_prefix = 'ioio_expatriate_person';
 
 exports.register = function(server, options, next) {
     var task = server.plugins.services.task;
@@ -27,7 +27,7 @@ exports.register = function(server, options, next) {
     var hr = server.plugins.services.hr;
     
     var cookie_options = {ttl:10*365*24*60*60*1000};
-    var cookie_key = "worker_mp_cookie";
+    var cookie_key = "ioio_expatriate_cookie";
     
     //页面获取微信id
     var page_get_openid = function(request,cb) {
