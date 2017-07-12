@@ -54,14 +54,14 @@ exports.register = function(server, options, next) {
             method: 'POST',
             path: '/employer_check',
             handler: function(request, reply) {
-                var username = request.payload.username;
-                var password = request.payload.password;
+                var gonghao = request.payload.gonghao;
+                var mobile = request.payload.mobile;
                 
-                if (!username) {
-                    return reply({"success":false,"message":"param username is null"});
+                if (!gonghao) {
+                    return reply({"success":false,"message":"param gonghao is null"});
                 }
-                if (!password) {
-                    return reply({"success":false,"message":"param password is null"});
+                if (!mobile) {
+                    return reply({"success":false,"message":"param mobile is null"});
                 }
                 
                 page_get_openid(request,function(openid) {
@@ -70,19 +70,16 @@ exports.register = function(server, options, next) {
                     }
                     
                     //判断用户
-                    hr.employer_check(username,password,function(err,content) {
+                    hr.employer_check(gonghao,mobile,function(err,content) {
                         if (err) {
                             return reply({"success":false,"message":content.message});
                         }
                         
                         //绑定用户信息
                         var row = content.row;
-                        var username = row.username;
-                        var person_name = row.name;
+                        var person_name = row.worker_name;
                         var mobile = row.mobile;
-                        var department_name = row.department_name;
-                        var is_xiaoshou = row.is_xiaoshou;
-                        var data_source = "公众号员工绑定";
+                        var data_source = "公众号绑定";
                         
                         person.save_person(mobile,person_name,mobile,data_source,function(err,result) {
                             if (err) {
@@ -90,30 +87,14 @@ exports.register = function(server, options, next) {
                             }
                             
                             var person_id = result.person_id;
-                            var company = "上海弘仁宝升汽车";
-                            var platform_id = "4s";
+                            var platform_id = "worker";
                             
                             //绑定用户微信信息
                             person.bind_person_wx(person_id,platform_id,openid,function(err,result) {
                                 
                             });
                             
-                            //更新二维码
-                            wx_api.create_qrcode(platform_id,"person_"+person_id,function(err,url) {
-                                if (!err) {
-                                    person.update_person_wx_qrcodeurl(platform_id,person_id,url,function(err,result) {
-                                        
-                                    });
-                                }
-                            });
-                            
-                            //保存用户工作
-                            person.save_job(person_id,company,department_name,is_xiaoshou,function(err,result) {
-                                if (err || !result.success) {
-                                    return reply({"success":false,"message":result.message});
-                                }
-                                return reply({"success":true,"message":"ok"});
-                            });
+                            return reply({"success":true,"message":"ok"});
                         });
                     });
                 });

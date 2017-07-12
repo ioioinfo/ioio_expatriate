@@ -43,6 +43,20 @@ var nav = function(server) {
                 cb(err,content)
             });
         },
+        
+        employer_check: function(gonghao,mobile,cb) {
+            var url = host + "hr/employer_check";
+            var data = {gonghao:gonghao,mobile:mobile};
+
+            uu_request.request(url, data, function(err, response, body) {
+                if (!err && response.statusCode === 200) {
+                    cb(err,body);
+                } else {
+                    cb(true,{message:"网络错误"});
+                }
+            });
+        },
+        
     };
 };
 
