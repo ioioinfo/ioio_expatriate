@@ -22158,7 +22158,7 @@ var Wrap = function (_React$Component) {
         key: 'componentDidMount',
         value: function componentDidMount() {
             $.ajax({
-                url: "/list_worker",
+                url: "/list_worker_with_count",
                 dataType: 'json',
                 type: 'GET',
                 data: {},
@@ -22427,6 +22427,12 @@ var Wrap = function (_React$Component) {
                                                     'span',
                                                     { className: "caozuoyuan_span" + index },
                                                     item.worker_name
+                                                ),
+                                                React.createElement(
+                                                    'span',
+                                                    { className: 'span_left' },
+                                                    '\u4EFB\u52A1\u91CF\uFF1A',
+                                                    item.count
                                                 )
                                             )
                                         )

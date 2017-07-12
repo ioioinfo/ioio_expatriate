@@ -22036,43 +22036,215 @@ var ReactDOM = __webpack_require__(80);
 // 框架
 
 var Wrap = function (_React$Component) {
-    _inherits(Wrap, _React$Component);
+  _inherits(Wrap, _React$Component);
 
-    function Wrap() {
-        _classCallCheck(this, Wrap);
+  function Wrap(props) {
+    _classCallCheck(this, Wrap);
 
-        return _possibleConstructorReturn(this, (Wrap.__proto__ || Object.getPrototypeOf(Wrap)).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, (Wrap.__proto__ || Object.getPrototypeOf(Wrap)).call(this, props));
+
+    _this.state = { taskitem: [], m_worker: {} };
+    return _this;
+  }
+
+  _createClass(Wrap, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      $.ajax({
+        url: "/list_task",
+        dataType: 'json',
+        type: 'GET',
+        data: {},
+        success: function (data) {
+          var list = data.rows;
+          if (!list) {
+
+            $(".no_task").css("display", "block");
+          }
+          this.setState({ taskitem: list, m_worker: data.m_worker });
+        }.bind(this),
+        error: function (xhr, status, err) {}.bind(this)
+      });
     }
+  }, {
+    key: 'handleClick',
+    value: function handleClick(e) {
+      ;
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
 
-    _createClass(Wrap, [{
-        key: 'render',
-        value: function render() {
+      return React.createElement(
+        'div',
+        { className: 'wrap' },
+        this.state.taskitem.map(function (item, index) {
+          return React.createElement(Task, { item: item, key: item.id, m_worker: _this2.state.m_worker });
+        }),
+        React.createElement(
+          'p',
+          { className: 'no_task' },
+          '\u6293\u7D27\u65B0\u5EFA\u4EFB\u52A1\u5427\uFF01'
+        )
+      );
+    }
+  }]);
+
+  return Wrap;
+}(React.Component);
+
+;
+
+var Task = function (_React$Component2) {
+  _inherits(Task, _React$Component2);
+
+  function Task() {
+    _classCallCheck(this, Task);
+
+    return _possibleConstructorReturn(this, (Task.__proto__ || Object.getPrototypeOf(Task)).apply(this, arguments));
+  }
+
+  _createClass(Task, [{
+    key: 'render',
+    value: function render() {
+      var _this4 = this;
+
+      var workers = React.createElement('span', null);
+      if (this.props.item.workers) {
+        workers = React.createElement(
+          'span',
+          null,
+          this.props.item.workers.map(function (item) {
             return React.createElement(
-                'div',
-                { className: 'wrap' },
-                React.createElement(
-                    'div',
-                    { className: 'list1' },
-                    React.createElement(
-                        'p',
-                        null,
-                        '\u4E34\u65F6\u4EFB\u52A1\uFF1A2'
-                    )
-                ),
-                React.createElement(
-                    'div',
-                    { className: 'list2' },
-                    React.createElement(
-                        'p',
-                        null,
-                        '\u5DF2\u5B8C\u6210\u4EFB\u52A1'
-                    )
-                )
+              'span',
+              { key: item },
+              _this4.props.m_worker[item],
+              ' /'
             );
-        }
-    }]);
+          })
+        );
+      }
+      return React.createElement(
+        'div',
+        { className: 'task_infor task_ul animation' },
+        React.createElement(
+          'div',
+          { className: 'weui-form-preview' },
+          React.createElement(
+            'div',
+            { className: 'weui-form-preview__hd' },
+            React.createElement(
+              'div',
+              { className: 'weui-form-preview__item' },
+              React.createElement(
+                'label',
+                { className: 'weui-form-preview__label' },
+                this.props.item.deadline
+              ),
+              React.createElement(
+                'em',
+                { className: 'weui-form-preview__value animation' },
+                '\u5DF2\u5B8C\u6210'
+              )
+            )
+          ),
+          React.createElement(
+            'div',
+            { className: 'weui-form-preview__bd' },
+            React.createElement(
+              'div',
+              { className: 'weui-form-preview__item' },
+              React.createElement(
+                'label',
+                { className: 'weui-form-preview__label' },
+                '\u5730\u5740'
+              ),
+              React.createElement(
+                'span',
+                { className: 'weui-form-preview__value' },
+                this.props.item.address
+              )
+            ),
+            React.createElement(
+              'div',
+              { className: 'weui-form-preview__item' },
+              React.createElement(
+                'label',
+                { className: 'weui-form-preview__label' },
+                '\u8054\u7CFB\u7535\u8BDD'
+              ),
+              React.createElement(
+                'span',
+                { className: 'weui-form-preview__value' },
+                this.props.item.mobile
+              )
+            ),
+            React.createElement(
+              'div',
+              { className: 'weui-form-preview__item' },
+              React.createElement(
+                'label',
+                { className: 'weui-form-preview__label' },
+                '\u8054\u7CFB\u59D3\u540D'
+              ),
+              React.createElement(
+                'span',
+                { className: 'weui-form-preview__value' },
+                this.props.item.link_name
+              )
+            ),
+            React.createElement(
+              'div',
+              { className: 'weui-form-preview__item' },
+              React.createElement(
+                'label',
+                { className: 'weui-form-preview__label' },
+                '\u8BA1\u5212\u5DE5\u4F5C\u65F6\u95F4'
+              ),
+              React.createElement(
+                'span',
+                { className: 'weui-form-preview__value' },
+                this.props.item.working_hours,
+                '\u5C0F\u65F6'
+              )
+            ),
+            React.createElement(
+              'div',
+              { className: 'weui-form-preview__item' },
+              React.createElement(
+                'label',
+                { className: 'weui-form-preview__label' },
+                '\u64CD\u4F5C\u5458'
+              ),
+              React.createElement(
+                'span',
+                { className: 'weui-form-preview__value' },
+                workers
+              )
+            ),
+            React.createElement(
+              'div',
+              { className: 'weui-form-preview__item' },
+              React.createElement(
+                'label',
+                { className: 'weui-form-preview__label' },
+                '\u4EFB\u52A1\u63CF\u8FF0'
+              ),
+              React.createElement(
+                'span',
+                { className: 'weui-form-preview__value' },
+                this.props.item.task_desc
+              )
+            )
+          )
+        ),
+        React.createElement('br', null)
+      );
+    }
+  }]);
 
-    return Wrap;
+  return Task;
 }(React.Component);
 
 ;

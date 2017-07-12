@@ -58,3 +58,6 @@ body,html{
 40%{-moz-transform:translateY(-30px)}
 60%{-moz-transform:translateY(-15px)}
 }
+.span_left{
+  margin-left: 10px;
+}

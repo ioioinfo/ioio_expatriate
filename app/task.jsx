@@ -116,7 +116,7 @@ class Wrap extends React.Component {
     }
     componentDidMount(){
       $.ajax({
-          url: "/list_worker",
+          url: "/list_worker_with_count",
           dataType: 'json',
           type: 'GET',
           data:{},
@@ -275,7 +275,7 @@ class Wrap extends React.Component {
                                     <i className="weui-icon-checked vertical_align"   id={"caozuoyuan_name_"+index} data-role={index} onClick={this.handClick1}></i>
                                 </div>
                                 <div className="weui-cell__bd">
-                                    <p><span className={"caozuoyuan_span"+index}>{item.worker_name}</span></p>
+                                    <p><span className={"caozuoyuan_span"+index}>{item.worker_name}</span><span className="span_left">任务量：{item.count}</span></p>
                                 </div>
                             </label>))
                           }

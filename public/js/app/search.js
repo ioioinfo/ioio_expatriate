@@ -22036,34 +22036,170 @@ var ReactDOM = __webpack_require__(80);
 var Wrap = function (_React$Component) {
     _inherits(Wrap, _React$Component);
 
-    function Wrap() {
+    function Wrap(props) {
         _classCallCheck(this, Wrap);
 
-        return _possibleConstructorReturn(this, (Wrap.__proto__ || Object.getPrototypeOf(Wrap)).apply(this, arguments));
+        var _this = _possibleConstructorReturn(this, (Wrap.__proto__ || Object.getPrototypeOf(Wrap)).call(this, props));
+
+        _this.handClick = _this.handClick.bind(_this);
+        return _this;
     }
 
     _createClass(Wrap, [{
+        key: 'handClick',
+        value: function handClick(e) {
+            $(".animate").css("display", "block");
+            $(".animate").attr("id", "animation ");
+        }
+    }, {
         key: 'render',
         value: function render() {
+            var style = { display: "none" };
             return React.createElement(
                 'div',
                 { className: 'wrap' },
                 React.createElement(
                     'div',
-                    { className: 'list1' },
+                    { className: 'task_search' },
                     React.createElement(
-                        'p',
-                        null,
-                        '\u4E34\u65F6\u4EFB\u52A1\uFF1A2'
+                        'div',
+                        { className: 'weui-search-bar', id: 'searchBar' },
+                        React.createElement(
+                            'form',
+                            { className: 'weui-search-bar__form' },
+                            React.createElement(
+                                'div',
+                                { className: 'weui-search-bar__box' },
+                                React.createElement('i', { className: 'weui-icon-search', onClick: this.handClick }),
+                                React.createElement('input', { type: 'search', className: 'weui-search-bar__input', id: 'searchInput', placeholder: '\u641C\u7D22', required: '' }),
+                                React.createElement('span', { className: 'weui-icon-clear', id: 'searchClear' })
+                            )
+                        )
                     )
                 ),
                 React.createElement(
                     'div',
-                    { className: 'list2' },
+                    { className: 'animate' },
                     React.createElement(
-                        'p',
-                        null,
-                        '\u5DF2\u5B8C\u6210\u4EFB\u52A1'
+                        'div',
+                        { className: 'weui-actionsheet1 overflow_auto', id: 'file' },
+                        React.createElement(
+                            'div',
+                            { className: 'weui-cell' },
+                            React.createElement(
+                                'div',
+                                { className: 'weui-cell__hd' },
+                                React.createElement(
+                                    'label',
+                                    { className: 'weui-label' },
+                                    '\u5730\u5740'
+                                )
+                            ),
+                            React.createElement(
+                                'div',
+                                { className: 'weui-cell__bd' },
+                                React.createElement('input', { className: 'weui-input address', type: 'text', placeholder: '\u8BF7\u8F93\u5165\u5B89\u88C5\u5730\u5740' })
+                            )
+                        ),
+                        React.createElement(
+                            'div',
+                            { className: 'weui-cell' },
+                            React.createElement(
+                                'div',
+                                { className: 'weui-cell__hd' },
+                                React.createElement(
+                                    'label',
+                                    { className: 'weui-label' },
+                                    '\u8054\u7CFB\u59D3\u540D'
+                                )
+                            ),
+                            React.createElement(
+                                'div',
+                                { className: 'weui-cell__bd' },
+                                React.createElement('input', { className: 'weui-input link_name', type: 'text', placeholder: '\u8BF7\u8F93\u5165\u5BA2\u6237\u59D3\u540D' })
+                            )
+                        ),
+                        React.createElement(
+                            'div',
+                            { className: 'weui-cell' },
+                            React.createElement(
+                                'div',
+                                { className: 'weui-cell__hd' },
+                                React.createElement(
+                                    'label',
+                                    { className: 'weui-label' },
+                                    '\u8054\u7CFB\u7535\u8BDD'
+                                )
+                            ),
+                            React.createElement(
+                                'div',
+                                { className: 'weui-cell__bd' },
+                                React.createElement('input', { className: 'weui-input mobile', type: 'text', placeholder: '\u8BF7\u8F93\u5165\u5BA2\u6237\u624B\u673A\u53F7' })
+                            )
+                        ),
+                        React.createElement(
+                            'div',
+                            { className: 'weui-cell' },
+                            React.createElement(
+                                'div',
+                                { className: 'weui-cell__hd' },
+                                React.createElement(
+                                    'label',
+                                    { className: 'weui-label' },
+                                    '\u8BA1\u5212\u5DE5\u4F5C\u65F6\u957F'
+                                )
+                            ),
+                            React.createElement(
+                                'div',
+                                { className: 'weui-cell__bd' },
+                                React.createElement('input', { className: 'weui-input working_hours', type: 'text', placeholder: '\u8BF7\u8F93\u5165\u9884\u8BA1\u5DE5\u4F5C\u65F6\u957F/h' })
+                            )
+                        ),
+                        React.createElement(
+                            'div',
+                            { className: 'weui-cell' },
+                            React.createElement(
+                                'div',
+                                { className: 'weui-cell__hd' },
+                                React.createElement(
+                                    'label',
+                                    { className: 'weui-label' },
+                                    '\u9884\u8BA1\u5B8C\u6210\u65F6\u95F4'
+                                )
+                            ),
+                            React.createElement(
+                                'div',
+                                { className: 'weui-cell__bd' },
+                                React.createElement('input', { className: 'weui-input form_datetime deadline', type: 'text', placeholder: '', readOnly: true })
+                            )
+                        ),
+                        React.createElement(
+                            'div',
+                            { className: 'weui-cell' },
+                            React.createElement(
+                                'div',
+                                { className: 'weui-cell__hd' },
+                                React.createElement(
+                                    'label',
+                                    { className: 'weui-label' },
+                                    '\u9009\u62E9\u64CD\u4F5C\u5458'
+                                )
+                            ),
+                            React.createElement(
+                                'div',
+                                { className: 'weui-cell__bd' },
+                                React.createElement('input', { className: 'weui-input', placeholder: '\u70B9\u51FB\u9009\u62E9\u64CD\u4F5C\u5458', readOnly: true })
+                            )
+                        ),
+                        React.createElement(
+                            'div',
+                            { className: 'weui-cell' },
+                            React.createElement(
+                                'div',
+                                { className: 'weui-cell__bd' },
+                                React.createElement('textarea', { className: 'weui-textarea task_desc', placeholder: '\u4EFB\u52A1\u63CF\u8FF0', rows: '3' })
+                            )
+                        )
                     )
                 )
             );

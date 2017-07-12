@@ -22033,15 +22033,74 @@ var ReactDOM = __webpack_require__(80);
 var Wrap = function (_React$Component) {
     _inherits(Wrap, _React$Component);
 
-    function Wrap() {
+    function Wrap(props) {
         _classCallCheck(this, Wrap);
 
-        return _possibleConstructorReturn(this, (Wrap.__proto__ || Object.getPrototypeOf(Wrap)).apply(this, arguments));
+        var _this = _possibleConstructorReturn(this, (Wrap.__proto__ || Object.getPrototypeOf(Wrap)).call(this, props));
+
+        _this.handleClick = _this.handleClick.bind(_this);
+        _this.state = { status: "0" };
+        return _this;
     }
 
     _createClass(Wrap, [{
+        key: 'handleClick',
+        value: function handleClick(e) {
+            if (this.state.status == "0") {
+                var username = $(".username").val();
+                var password = $(".password").val();
+                if (!username || !password) {
+                    var $loadingToast1 = $('#loadingToast1');
+                    if ($loadingToast1.css('display') != 'none') return;
+
+                    $loadingToast1.fadeIn(100);
+                    setTimeout(function () {
+                        $loadingToast1.fadeOut(100);
+                    }, 2000);
+                    return;
+                }
+                $.ajax({
+                    url: "/employer_check",
+                    dataType: 'json',
+                    type: 'POST',
+                    data: { "username": $(".username").val(),
+                        "password": $(".password").val() },
+                    success: function (data) {
+                        if (data.success) {
+                            var $toast = $('#toast');
+                            if ($toast.css('display') != 'none') return;
+
+                            $toast.fadeIn(100);
+                            setTimeout(function () {
+                                $toast.fadeOut(100);
+                            }, 2000);
+                            this.setState({ "status": "1" });
+                        } else {
+                            var $loadingToast = $('#loadingToast');
+                            if ($loadingToast.css('display') != 'none') return;
+
+                            $loadingToast.fadeIn(100);
+                            setTimeout(function () {
+                                $loadingToast.fadeOut(100);
+                            }, 2000);
+                        }
+                    }.bind(this),
+                    error: function (xhr, status, err) {}.bind(this)
+                });
+            } else {
+                var $warnToast = $('#warnToast');
+                if ($warnToast.css('display') != 'none') return;
+
+                $warnToast.fadeIn(100);
+                setTimeout(function () {
+                    $warnToast.fadeOut(100);
+                }, 2000);
+            }
+        }
+    }, {
         key: 'render',
         value: function render() {
+            var style = { display: "none" };
             return React.createElement(
                 'div',
                 { className: 'wrap' },
@@ -22051,7 +22110,7 @@ var Wrap = function (_React$Component) {
                     React.createElement(
                         'p',
                         { className: 'title' },
-                        '\u7ED1\u5B9A\u7BA1\u7406\u5458'
+                        '\u7ED1\u5B9A\u5E10\u53F7'
                     ),
                     React.createElement(
                         'div',
@@ -22062,13 +22121,13 @@ var Wrap = function (_React$Component) {
                             React.createElement(
                                 'label',
                                 { className: 'weui-label' },
-                                '\u7528\u6237\u540D'
+                                '\u5DE5\u53F7'
                             )
                         ),
                         React.createElement(
                             'div',
                             { className: 'weui-cell__bd' },
-                            React.createElement('input', { className: 'weui-input', type: 'number', placeholder: '\u8BF7\u8F93\u5165\u7528\u6237\u540D' })
+                            React.createElement('input', { className: 'weui-input username', type: 'text', placeholder: '\u8BF7\u8F93\u5165\u5DE5\u53F7' })
                         )
                     ),
                     React.createElement(
@@ -22080,13 +22139,13 @@ var Wrap = function (_React$Component) {
                             React.createElement(
                                 'label',
                                 { className: 'weui-label' },
-                                '\u5BC6\u7801'
+                                '\u624B\u673A\u53F7'
                             )
                         ),
                         React.createElement(
                             'div',
                             { className: 'weui-cell__bd' },
-                            React.createElement('input', { className: 'weui-input', type: 'number', placeholder: '\u8BF7\u8F93\u5165\u5BC6\u7801' })
+                            React.createElement('input', { className: 'weui-input password', type: 'text', placeholder: '\u8BF7\u8F93\u5165\u624B\u673A\u53F7' })
                         )
                     ),
                     React.createElement('p', { className: 'line' }),
@@ -22095,8 +22154,73 @@ var Wrap = function (_React$Component) {
                         { className: 'weui-btn-area' },
                         React.createElement(
                             'span',
-                            { className: 'weui-btn weui-btn_primary', id: 'showTooltips' },
+                            { className: 'weui-btn weui-btn_primary', id: 'showTooltips', onClick: this.handleClick },
                             '\u786E\u5B9A'
+                        )
+                    )
+                ),
+                React.createElement('div', { className: 'background' }),
+                React.createElement(
+                    'div',
+                    { className: 'page toast js_show' },
+                    React.createElement(
+                        'div',
+                        { id: 'toast', style: style },
+                        React.createElement('div', { className: 'weui-mask_transparent' }),
+                        React.createElement(
+                            'div',
+                            { className: 'weui-toast' },
+                            React.createElement('i', { className: 'weui-icon-success weui-icon_msg' }),
+                            React.createElement(
+                                'p',
+                                { className: 'weui-toast__content' },
+                                '\u7ED1\u5B9A\u6210\u529F'
+                            )
+                        )
+                    ),
+                    React.createElement(
+                        'div',
+                        { id: 'loadingToast', style: style },
+                        React.createElement('div', { className: 'weui-mask_transparent' }),
+                        React.createElement(
+                            'div',
+                            { className: 'weui-toast' },
+                            React.createElement('i', { className: 'weui-icon-warn weui-icon_msg' }),
+                            React.createElement(
+                                'p',
+                                { className: 'weui-toast__content' },
+                                '\u7ED1\u5B9A\u5931\u8D25'
+                            )
+                        )
+                    ),
+                    React.createElement(
+                        'div',
+                        { id: 'warnToast', style: style },
+                        React.createElement('div', { className: 'weui-mask_transparent' }),
+                        React.createElement(
+                            'div',
+                            { className: 'weui-toast' },
+                            React.createElement('i', { className: 'weui-icon-info weui-icon_msg' }),
+                            React.createElement(
+                                'p',
+                                { className: 'weui-toast__content' },
+                                '\u5DF2\u7ED1\u5B9A'
+                            )
+                        )
+                    )
+                ),
+                React.createElement(
+                    'div',
+                    { id: 'loadingToast1', style: style },
+                    React.createElement('div', { className: 'weui-mask_transparent' }),
+                    React.createElement(
+                        'div',
+                        { className: 'weui-toast' },
+                        React.createElement('i', { className: 'weui-icon-warn weui-icon_msg' }),
+                        React.createElement(
+                            'p',
+                            { className: 'weui-toast__content' },
+                            '\u7528\u6237\u540D\u3001\u5BC6\u7801\u5FC5\u586B'
                         )
                     )
                 )

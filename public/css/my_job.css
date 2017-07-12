@@ -1,103 +1,66 @@
 body,html{
   height: 100%;
+  background: #F8F8F8;
   position: relative;
-  overflow: hidden;
-  background: url(../images/my_job.jpg)no-repeat 0 0;
-  background-size: cover;
 }
-.wrap{
-  margin: 0 auto;
-  padding: 10px;
-  overflow: hidden;
-}
-.nav{
-  width: 100%;
-  z-index: 9999;
-  display: flex;
+.newfile{
   position: fixed;
   left: 0;
+  right: 0;
   bottom: 0;
+  background: #fff;
 }
-.list1{
-  flex: 1;
-  height: 55px;
-  line-height: 55px;
-  background: url(../images/task1.jpg)no-repeat 0 0;
-  background-size: cover;
-  text-align: center;
-  color: #fff;
-  font-size: 18px;
-}
-.list2{
-  flex: 1;
-  height: 55px;
-  line-height: 55px;
-  background: url(../images/task2.jpg)no-repeat 0 0;
-  background-size: cover;
-  text-align: center;
-  color: #fff;
-  font-size: 18px;
-}
-.list3{
-  flex: 1;
-  height: 55px;
-  line-height:55px;
-  background: url(../images/task1.jpg)no-repeat 0 0;
-  background-size: cover;
-  text-align: center;
-  color: #fff;
-  font-size: 18px;
-}
-.linshi_task{
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  bottom: 0;
+.workfile{
+  position: fixed;
   left: 0;
-  background: #BBDBE8;
-  z-index: 9;
-}
-.linshi_task_list{
-  width: 85%;
-  margin: 10px auto 15px;
-}
-
-.today_task{
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0;
+  right: 0;
   bottom: 0;
-  left: 100%;
-  background: #F4F29D;
-  z-index: 9;
-}
-.today_task_list{
-  width: 85%;
-  margin: 10px auto 15px;
-}
-
-.month_task{
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 100%;
-  background: #CFDFBB;
-  z-index: 9;
-}
-.month_task_list{
-  width: 85%;
-  margin: 10px auto 15px;
 }
 .background{
   width: 100%;
-  height: 55px;
+  height: 50px;
 }
-.play_time{
-  font-size: 18px;
-  font-weight: 400;
-  color: #6C87D6;
+.vertical_align{
+  vertical-align: super;
+}
+.overflow_auto{
+  overflow: auto;
+}
+.modify_left{
+  margin-left: 7px;
+  color: #E7B020;
+}
+.weui-skin_android .weui-actionsheet{
+  width: 100%;
+  background: #fff;
+  height: 100%;
+}
+.weui-label{
+  text-align: left;
+}
+.no_task{
+  font-size: 24px;
+  text-align: center;
+  margin-top: 100px;
+  color: #000;
+  display: none;
+}
+.animation{
+-webkit-animation:rotateIn 1s .2s ease both;
+-moz-animation:rotateIn 1s .2s ease both;}
+@-webkit-keyframes rotateIn{
+0%{-webkit-transform-origin:center center;
+-webkit-transform:rotate(-200deg);
+opacity:0}
+100%{-webkit-transform-origin:center center;
+-webkit-transform:rotate(0);
+opacity:1}
+}
+@-moz-keyframes rotateIn{
+0%{-moz-transform-origin:center center;
+-moz-transform:rotate(-200deg);
+opacity:0}
+100%{-moz-transform-origin:center center;
+-moz-transform:rotate(0);
+opacity:1}
 }

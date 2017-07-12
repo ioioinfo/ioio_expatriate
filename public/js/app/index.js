@@ -22034,13 +22034,19 @@ var ReactDOM = __webpack_require__(80);
 var Wrap = function (_React$Component) {
   _inherits(Wrap, _React$Component);
 
-  function Wrap() {
+  function Wrap(props) {
     _classCallCheck(this, Wrap);
 
-    return _possibleConstructorReturn(this, (Wrap.__proto__ || Object.getPrototypeOf(Wrap)).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, (Wrap.__proto__ || Object.getPrototypeOf(Wrap)).call(this, props));
+
+    _this.handClick = _this.handClick.bind(_this);
+    return _this;
   }
 
   _createClass(Wrap, [{
+    key: 'handClick',
+    value: function handClick(e) {}
+  }, {
     key: 'render',
     value: function render() {
       return React.createElement(
@@ -22061,12 +22067,7 @@ var Wrap = function (_React$Component) {
                 React.createElement(
                   'p',
                   null,
-                  React.createElement('img', { src: 'images/news.png', alt: '' }),
-                  React.createElement(
-                    'span',
-                    { className: 'news_num' },
-                    '99'
-                  )
+                  React.createElement('img', { src: 'images/', alt: '' })
                 )
               ),
               React.createElement(
@@ -22110,7 +22111,7 @@ var Wrap = function (_React$Component) {
                   null,
                   '\u5DE5\u9F84'
                 ),
-                ': 4\u5E74'
+                ': 4 \u5E74'
               ),
               React.createElement(
                 'p',
@@ -22136,6 +22137,12 @@ var Wrap = function (_React$Component) {
               )
             )
           )
+        ),
+        React.createElement(
+          'div',
+          { className: 'worker_photo' },
+          React.createElement('img', { className: 'carm', src: 'images/carm1.png', alt: '', onClick: this.handClick }),
+          React.createElement('img', { className: 'worker_photo_in', src: 'images/workman1.jpg', alt: '' })
         )
       );
     }
