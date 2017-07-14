@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 185);
+/******/ 	return __webpack_require__(__webpack_require__.s = 186);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -22015,7 +22015,8 @@ module.exports = traverseAllChildren;
 /* 182 */,
 /* 183 */,
 /* 184 */,
-/* 185 */
+/* 185 */,
+/* 186 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -22050,7 +22051,7 @@ var Wrap = function (_React$Component) {
         _this.handClick5 = _this.handClick5.bind(_this);
         _this.rowData = _this.rowData.bind(_this);
         _this.modifyGet = _this.modifyGet.bind(_this);
-        _this.state = { taskitem: [], worksitem: [], nameId: [], m_worker: {}, workInfor: {} };
+        _this.state = { taskitem: [], worksitem: [], m_worker: {}, workInfor: {} };
         return _this;
     }
 
@@ -22115,6 +22116,26 @@ var Wrap = function (_React$Component) {
             var link_name = $(".link_name").val();
             var mobile = $(".mobile").val();
             var task_desc = $(".task_desc").val();
+
+            if (!address) {
+                alert("请选择工作地址");
+                return;
+            } else if (!link_name) {
+                alert("请填写联系人姓名");
+                return;
+            } else if (!mobile) {
+                alert("请填写联系人手机");
+                return;
+            } else if (!deadline) {
+                alert("请设置预计工作时长");
+                return;
+            } else if (!working_hours) {
+                alert("请选择创建时间");
+                return;
+            } else if (!task_desc) {
+                alert("请填写工作描述");
+                return;
+            }
             $.ajax({
                 url: "/save_task",
                 dataType: 'json',
@@ -22142,11 +22163,10 @@ var Wrap = function (_React$Component) {
                 url: "/list_task",
                 dataType: 'json',
                 type: 'GET',
-                data: {},
+                data: { stage: "inprogress" },
                 success: function (data) {
                     var list = data.rows;
-                    if (!list) {
-
+                    if (list.length == 0) {
                         $(".no_task").css("display", "block");
                     }
                     this.setState({ taskitem: list, m_worker: data.m_worker });
@@ -22175,30 +22195,22 @@ var Wrap = function (_React$Component) {
 
     }, {
         key: 'handClick1',
-        value: function handClick1(e) {
-            var id = e.target.id;
-            var index = $(e.target).data("role");
-            var caozuoyuan_name = "caozuoyuan_name_" + index;
-            var nameId = this.state.nameId;
-            if (id == caozuoyuan_name) {
-                var l = this.state.worksitem[index].id;
-                var caozuoyuan = $(".caozuoyuan_span" + index).html();
-                var name = $.inArray(l, nameId);
-                if (name < 0) {
-                    nameId.push(l);
-                    this.setState({ nameId: nameId });
-                } else {
-                    nameId.splice(name, 1);
-                    this.setState({ nameId: nameId });
-                }
-            }
-        }
+        value: function handClick1(e) {}
         // 分配功能
 
     }, {
         key: 'handClick3',
         value: function handClick3(e) {
-            var nameId = this.state.nameId;
+            var nameId = [];
+            $("[name=checkbox1]:checked").each(function () {
+                nameId.push($(this).val());
+            });
+
+            if (nameId.length == 0) {
+                alert("请选择工人");
+                return;
+            }
+
             $.ajax({
                 url: "/assign_worker",
                 dataType: 'json',
@@ -22361,24 +22373,6 @@ var Wrap = function (_React$Component) {
                             { className: 'weui-cell' },
                             React.createElement(
                                 'div',
-                                { className: 'weui-cell__hd' },
-                                React.createElement(
-                                    'label',
-                                    { className: 'weui-label' },
-                                    '\u9009\u62E9\u64CD\u4F5C\u5458'
-                                )
-                            ),
-                            React.createElement(
-                                'div',
-                                { className: 'weui-cell__bd' },
-                                React.createElement('input', { className: 'weui-input', placeholder: '\u70B9\u51FB\u9009\u62E9\u64CD\u4F5C\u5458', readOnly: true })
-                            )
-                        ),
-                        React.createElement(
-                            'div',
-                            { className: 'weui-cell' },
-                            React.createElement(
-                                'div',
                                 { className: 'weui-cell__bd' },
                                 React.createElement('textarea', { className: 'weui-textarea task_desc', placeholder: '\u4EFB\u52A1\u63CF\u8FF0', rows: '3' })
                             )
@@ -22414,8 +22408,8 @@ var Wrap = function (_React$Component) {
                                         React.createElement(
                                             'div',
                                             { className: 'weui-cell__hd' },
-                                            React.createElement('input', { type: 'checkbox', className: 'weui-check', name: 'checkbox1' }),
-                                            React.createElement('i', { className: 'weui-icon-checked vertical_align', id: "caozuoyuan_name_" + index, 'data-role': index, onClick: _this2.handClick1 })
+                                            React.createElement('input', { type: 'checkbox', className: 'weui-check', name: 'checkbox1', value: item.id }),
+                                            React.createElement('i', { className: 'weui-icon-checked vertical_align' })
                                         ),
                                         React.createElement(
                                             'div',
@@ -22425,7 +22419,7 @@ var Wrap = function (_React$Component) {
                                                 null,
                                                 React.createElement(
                                                     'span',
-                                                    { className: "caozuoyuan_span" + index },
+                                                    null,
                                                     item.worker_name
                                                 ),
                                                 React.createElement(
@@ -22582,7 +22576,7 @@ var Wrap = function (_React$Component) {
                 React.createElement(
                     'p',
                     { className: 'no_task' },
-                    '\u6293\u7D27\u65B0\u5EFA\u4EFB\u52A1\u5427\uFF01'
+                    '\u6682\u65F6\u6CA1\u6709\u4EFB\u52A1'
                 )
             );
         }

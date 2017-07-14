@@ -46,12 +46,12 @@ exports.register = function(server, options, next) {
             },
         },
 
-        //today_task当日完成任务
+        //performance业绩
         {
             method: 'GET',
-            path: '/today_task',
+            path: '/performance',
             handler: function(request, reply) {
-                return reply.view("today_task");
+                return reply.view("performance");
             },
         },
 

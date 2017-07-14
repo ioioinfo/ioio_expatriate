@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 183);
+/******/ 	return __webpack_require__(__webpack_require__.s = 184);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -22013,7 +22013,8 @@ module.exports = traverseAllChildren;
 /***/ }),
 /* 181 */,
 /* 182 */,
-/* 183 */
+/* 183 */,
+/* 184 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -22048,13 +22049,14 @@ var Wrap = function (_React$Component) {
     key: 'componentDidMount',
     value: function componentDidMount() {
       $.ajax({
-        url: "/list_my_task",
+        url: "/list_task",
         dataType: 'json',
         type: 'GET',
         data: {},
         success: function (data) {
           var list = data.rows;
-          if (list.length == 0) {
+          if (!list) {
+
             $(".no_task").css("display", "block");
           }
           this.setState({ taskitem: list, m_worker: data.m_worker });
@@ -22072,25 +22074,16 @@ var Wrap = function (_React$Component) {
     value: function render() {
       var _this2 = this;
 
-      var task = React.createElement('span', null);
-      var tasklength = this.state.taskitem;
-      if (tasklength.length > 0) {
-        task = React.createElement(
-          'div',
-          null,
-          this.state.taskitem.map(function (item, index) {
-            return React.createElement(Task, { item: item, key: item.id, m_worker: _this2.state.m_worker });
-          })
-        );
-      }
       return React.createElement(
         'div',
         { className: 'wrap' },
-        task,
+        this.state.taskitem.map(function (item, index) {
+          return React.createElement(Task, { item: item, key: item.id, m_worker: _this2.state.m_worker });
+        }),
         React.createElement(
           'p',
           { className: 'no_task' },
-          '\u6682\u65E0\u4EFB\u52A1'
+          '\u6293\u7D27\u65B0\u5EFA\u4EFB\u52A1\u5427\uFF01'
         )
       );
     }
@@ -22150,7 +22143,7 @@ var Task = function (_React$Component2) {
               React.createElement(
                 'em',
                 { className: 'weui-form-preview__value animation' },
-                this.props.item.state
+                '\u5DF2\u5B8C\u6210'
               )
             )
           ),

@@ -2,6 +2,7 @@ body,html{
   height: 100%;
   background: #EFF1FF;
   position: relative;
+  overflow: hidden;
 }
 .worker_top{
   width: 230px;
@@ -45,10 +46,12 @@ body,html{
 }
 .work_news p img{
   width: 25px;
+  padding-top: 7px;
 
 }
 .work_infor p img{
   width: 20px;
+  padding-top: 7px;
 }
 .work_photo p{
   width: 85px;
@@ -89,7 +92,7 @@ body,html{
 
 }
 .work_in{
-  width: 230px;
+  width: 245px;
   margin:0 auto;
 }
 .worker_photo{
@@ -109,7 +112,6 @@ body,html{
   display: none;
 }
 .worker_photo .worker_photo_in{
-  width: 100%;
   height: 100%;
 
 }

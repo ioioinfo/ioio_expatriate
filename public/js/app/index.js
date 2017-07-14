@@ -22040,10 +22040,27 @@ var Wrap = function (_React$Component) {
     var _this = _possibleConstructorReturn(this, (Wrap.__proto__ || Object.getPrototypeOf(Wrap)).call(this, props));
 
     _this.handClick = _this.handClick.bind(_this);
+    _this.state = { img: {} };
     return _this;
   }
 
   _createClass(Wrap, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      $.ajax({
+        url: "/get_photo_by_worker",
+        dataType: 'json',
+        type: 'GET',
+        data: {},
+        success: function (data) {
+          if (data.rows.length > 0) {
+            this.setState({ img: data.rows[0] });
+          }
+        }.bind(this),
+        error: function (xhr, status, err) {}.bind(this)
+      });
+    }
+  }, {
     key: 'handClick',
     value: function handClick(e) {}
   }, {
@@ -22065,9 +22082,13 @@ var Wrap = function (_React$Component) {
                 'div',
                 { className: 'worker_top_img work_news' },
                 React.createElement(
-                  'p',
-                  null,
-                  React.createElement('img', { src: 'images/', alt: '' })
+                  'a',
+                  { href: 'performance' },
+                  React.createElement(
+                    'p',
+                    null,
+                    React.createElement('img', { src: 'images/yeji.png', alt: '' })
+                  )
                 )
               ),
               React.createElement(
@@ -22083,13 +22104,17 @@ var Wrap = function (_React$Component) {
                 'div',
                 { className: 'worker_top_img work_infor' },
                 React.createElement(
-                  'p',
-                  null,
-                  React.createElement('img', { src: 'images/work.png', alt: '' }),
+                  'a',
+                  { href: 'my_job' },
                   React.createElement(
-                    'span',
-                    { className: 'news_num' },
-                    '99'
+                    'p',
+                    null,
+                    React.createElement('img', { src: 'images/work.png', alt: '' }),
+                    React.createElement(
+                      'span',
+                      { className: 'news_num' },
+                      '99'
+                    )
                   )
                 )
               )
@@ -22131,9 +22156,9 @@ var Wrap = function (_React$Component) {
                 React.createElement(
                   'span',
                   null,
-                  '\u64CD\u4F5C\u8BF4\u660E'
+                  '\u624B\u673A'
                 ),
-                ': \u70B9\u6211\u67E5\u770B'
+                ': 17621140955'
               )
             )
           )
@@ -22142,7 +22167,7 @@ var Wrap = function (_React$Component) {
           'div',
           { className: 'worker_photo' },
           React.createElement('img', { className: 'carm', src: 'images/carm1.png', alt: '', onClick: this.handClick }),
-          React.createElement('img', { className: 'worker_photo_in', src: 'images/workman1.jpg', alt: '' })
+          React.createElement('img', { className: 'worker_photo_in', src: this.state.img.location, alt: '' })
         )
       );
     }

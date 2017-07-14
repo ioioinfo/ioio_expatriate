@@ -14,7 +14,7 @@ class Wrap extends React.Component {
         this.handClick5=this.handClick5.bind(this);
         this.rowData=this.rowData.bind(this);
         this.modifyGet=this.modifyGet.bind(this);
-        this.state={taskitem:[],worksitem:[],nameId:[],m_worker:{},workInfor:{}};
+        this.state={taskitem:[],worksitem:[],m_worker:{},workInfor:{}};
     }
 
     handClick4(e){
@@ -73,6 +73,26 @@ class Wrap extends React.Component {
       var link_name = $(".link_name").val();
       var mobile = $(".mobile").val();
       var task_desc = $(".task_desc").val();
+
+      if (!address) {
+        alert("请选择工作地址");
+        return;
+      }else if (!link_name) {
+        alert("请填写联系人姓名");
+        return;
+      }else if (!mobile) {
+        alert("请填写联系人手机");
+        return;
+      }else if (!deadline) {
+        alert("请设置预计工作时长");
+        return;
+      }else if (!working_hours) {
+        alert("请选择创建时间");
+        return;
+      }else if (!task_desc) {
+        alert("请填写工作描述");
+        return;
+      }
       $.ajax({
           url: "/save_task",
           dataType: 'json',
@@ -99,11 +119,10 @@ class Wrap extends React.Component {
           url: "/list_task",
           dataType: 'json',
           type: 'GET',
-          data:{},
+          data:{stage:"inprogress"},
           success: function(data) {
               var list = data.rows;
-              if(!list){
-
+              if(list.length==0){
                   $(".no_task").css("display","block");
               }
                 this.setState({taskitem:list,m_worker:data.m_worker});
@@ -132,26 +151,19 @@ class Wrap extends React.Component {
 
     // 工人id
     handClick1(e){
-      var id = e.target.id;
-      var index = $(e.target).data("role");
-      var caozuoyuan_name = "caozuoyuan_name_"+index;
-      var nameId = this.state.nameId;
-      if(id==caozuoyuan_name){
-        var l = this.state.worksitem[index].id;
-        var caozuoyuan = $(".caozuoyuan_span"+index).html();
-        var name = $.inArray(l, nameId);
-        if(name<0){
-          nameId.push(l);
-          this.setState({nameId:nameId});
-        }else {
-          nameId.splice(name,1);
-          this.setState({nameId:nameId});
-        }
-      }
     }
     // 分配功能
     handClick3(e){
-      var nameId = this.state.nameId;
+      var nameId = [];
+      $("[name=checkbox1]:checked").each(function(){
+        nameId.push($(this).val());
+      });
+
+      if (nameId.length == 0) {
+        alert("请选择工人");
+        return;
+      }
+
       $.ajax({
           url: "/assign_worker",
           dataType: 'json',
@@ -243,13 +255,6 @@ class Wrap extends React.Component {
                       </div>
 
                       <div className="weui-cell">
-                          <div className="weui-cell__hd"><label className="weui-label">选择操作员</label></div>
-                          <div className="weui-cell__bd">
-                              <input className="weui-input" placeholder="点击选择操作员"  readOnly />
-                          </div>
-                      </div>
-
-                      <div className="weui-cell">
                           <div className="weui-cell__bd">
                               <textarea className="weui-textarea task_desc" placeholder="任务描述" rows="3"></textarea>
                           </div>
@@ -271,11 +276,11 @@ class Wrap extends React.Component {
                           {this.state.worksitem.map((item,index)=> (
                             <label className="weui-cell weui-check__label" key={item.id}>
                                 <div className="weui-cell__hd">
-                                    <input type="checkbox" className="weui-check" name="checkbox1" />
-                                    <i className="weui-icon-checked vertical_align"   id={"caozuoyuan_name_"+index} data-role={index} onClick={this.handClick1}></i>
+                                    <input type="checkbox" className="weui-check" name="checkbox1" value={item.id} />
+                                    <i className="weui-icon-checked vertical_align"></i>
                                 </div>
                                 <div className="weui-cell__bd">
-                                    <p><span className={"caozuoyuan_span"+index}>{item.worker_name}</span><span className="span_left">任务量：{item.count}</span></p>
+                                    <p><span>{item.worker_name}</span><span className="span_left">任务量：{item.count}</span></p>
                                 </div>
                             </label>))
                           }
@@ -339,7 +344,7 @@ class Wrap extends React.Component {
                   </div>
               </div>
 
-              <p className="no_task">抓紧新建任务吧！</p>
+              <p className="no_task">暂时没有任务</p>
             </div>
         );
     }

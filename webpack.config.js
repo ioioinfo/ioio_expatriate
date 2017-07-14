@@ -17,7 +17,7 @@ module.exports = {
     entry: {
         index: './app/index.jsx',
         my_job: './app/my_job.jsx',
-        today_task: './app/today_task.jsx',
+        performance: './app/performance.jsx',
         task: './app/task.jsx',
         bind: './app/bind.jsx',
         search: './app/search.jsx',

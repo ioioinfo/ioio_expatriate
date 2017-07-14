@@ -9,13 +9,14 @@ body,html{
   left: 0;
   right: 0;
   z-index: 6000;
+
 }
 .weui-actionsheet1{
   width: 80%;
   position: fixed;
   left: 10%;
   top: 55px;
-  z-index: 5000;
+  z-index: 8000;
   background-color: #EFEFF4;
   -webkit-transition: -webkit-transform .3s;
   transition: -webkit-transform .3s;
@@ -24,24 +25,116 @@ body,html{
 }
 .animate{
   display: none;
+
+}
+.task_list{
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 44px;
+  background: #fff;
+  z-index: 7000;
+  padding-top: 17px;
+  display: none;
+  overflow: auto;
+}
+.task_list_title{
+  overflow: hidden;
+}
+li{
+  list-style: none;
+}
+.task_list ul li{
+  float: left;
+  height: 27px;
+  line-height: 27px;
+  text-align: center;
+}
+.task_list ul li:first-child{
+  width: 25%;
+}
+.task_list ul li:nth-child(3n+2){
+  width: 25%;
+}
+.task_list_title li:last-child{
+  width: 50%;
+}
+.donghua_in{
+  position: relative;
+  overflow: hidden;
+}
+.task_list_close{
+  position: fixed;
+  font-size: 24px;
+  color: #999;
+  bottom: 45px;
+  right: 25px;
+  display: inline-block;
+}
+.animate_close{
+  position: absolute;
+  font-size: 18px;
+  color: #999;
+  top: 12px;
+  right: 15px;
+  display: inline-block;
+}
+#animation{
+-webkit-animation:bounceInDown 1s .2s ease both;
+-moz-animation:bounceInDown 1s .2s ease both;}
+@-webkit-keyframes bounceInDown{
+0%{opacity:0;
+-webkit-transform:translateY(-2000px)}
+60%{opacity:1;
+-webkit-transform:translateY(30px)}
+80%{-webkit-transform:translateY(-10px)}
+100%{-webkit-transform:translateY(0)}
+}
+@-moz-keyframes bounceInDown{
+0%{opacity:0;
+-moz-transform:translateY(-2000px)}
+60%{opacity:1;
+-moz-transform:translateY(30px)}
+80%{-moz-transform:translateY(-10px)}
+100%{-moz-transform:translateY(0)}
 }
 
-#animation{
--webkit-animation:bounceIn 1s .2s ease both;
--moz-animation:bounceIn 1s .2s ease both;}
-@-webkit-keyframes bounceIn{
+.task_list{
+-webkit-animation:bounceInUp 1s .2s ease both;
+-moz-animation:bounceInUp 1s .2s ease both;}
+@-webkit-keyframes bounceInUp{
 0%{opacity:0;
--webkit-transform:scale(.3)}
-50%{opacity:1;
--webkit-transform:scale(1.05)}
-70%{-webkit-transform:scale(.9)}
-100%{-webkit-transform:scale(1)}
+-webkit-transform:translateY(2000px)}
+60%{opacity:1;
+-webkit-transform:translateY(-30px)}
+80%{-webkit-transform:translateY(10px)}
+100%{-webkit-transform:translateY(0)}
 }
-@-moz-keyframes bounceIn{
+@-moz-keyframes bounceInUp{
 0%{opacity:0;
--moz-transform:scale(.3)}
-50%{opacity:1;
--moz-transform:scale(1.05)}
-70%{-moz-transform:scale(.9)}
-100%{-moz-transform:scale(1)}
+-moz-transform:translateY(2000px)}
+60%{opacity:1;
+-moz-transform:translateY(-30px)}
+80%{-moz-transform:translateY(10px)}
+100%{-moz-transform:translateY(0)}
+}
+
+#task_list_out{
+-webkit-animation:bounceOutUp 1s .2s ease both;
+-moz-animation:bounceOutUp 1s .2s ease both;}
+@-webkit-keyframes bounceOutUp{
+0%{-webkit-transform:translateY(0)}
+20%{opacity:1;
+-webkit-transform:translateY(20px)}
+100%{opacity:0;
+-webkit-transform:translateY(-2000px)}
+}
+@-moz-keyframes bounceOutUp{
+0%{-moz-transform:translateY(0)}
+20%{opacity:1;
+-moz-transform:translateY(20px)}
+100%{opacity:0;
+-moz-transform:translateY(-2000px)}
 }

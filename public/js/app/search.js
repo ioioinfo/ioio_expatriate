@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 184);
+/******/ 	return __webpack_require__(__webpack_require__.s = 185);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -22014,7 +22014,8 @@ module.exports = traverseAllChildren;
 /* 181 */,
 /* 182 */,
 /* 183 */,
-/* 184 */
+/* 184 */,
+/* 185 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -22041,19 +22042,82 @@ var Wrap = function (_React$Component) {
 
         var _this = _possibleConstructorReturn(this, (Wrap.__proto__ || Object.getPrototypeOf(Wrap)).call(this, props));
 
+        _this.onKeyPress = _this.onKeyPress.bind(_this);
         _this.handClick = _this.handClick.bind(_this);
+        _this.getData = _this.getData.bind(_this);
+        _this.state = { taskitem: [], workInfor: { "workers": [] }, m_worker: {} };
         return _this;
     }
 
+    // enter键
+
+
     _createClass(Wrap, [{
+        key: 'onKeyPress',
+        value: function onKeyPress(e) {
+            var val = $("#searchInput").val();
+            var key = e.which;
+            if (key == 13) {
+                $.ajax({
+                    url: "/search_complete",
+                    dataType: 'json',
+                    type: 'GET',
+                    data: { q: val },
+                    success: function (data) {
+                        var list = data.rows;
+                        if (list.length == 0) {}
+                        $(".task_list").css("display", "block");
+                        this.setState({ taskitem: list });
+                        $("#searchInput").blur();
+                    }.bind(this),
+                    error: function (xhr, status, err) {}.bind(this)
+                });
+
+                $(".task_list").removeAttr("id");
+            }
+        }
+    }, {
         key: 'handClick',
         value: function handClick(e) {
-            $(".animate").css("display", "block");
-            $(".animate").attr("id", "animation ");
+            $("#searchInput").val("");
+            $(".donghua").removeAttr("id");
+        }
+    }, {
+        key: 'handClick1',
+        value: function handClick1(e) {
+            $(".task_list").attr("id", "task_list_out");
+            $(".task_list").css("display", "none");
+        }
+    }, {
+        key: 'handClick2',
+        value: function handClick2(e) {
+            $(".donghua").attr("id", "task_list_out");
+            $(".animate").css("display", "none");
+        }
+    }, {
+        key: 'getData',
+        value: function getData(id) {
+            $.ajax({
+                url: "/get_by_id",
+                dataType: 'json',
+                type: 'GET',
+                data: { "id": id },
+                success: function (data) {
+                    this.setState({ workInfor: data.rows[0], m_worker: data.m_worker });
+                    if (data.success) {
+
+                        $(".donghua").attr("id", "animation");
+                        $(".animate").css("display", "block");
+                    }
+                }.bind(this),
+                error: function (xhr, status, err) {}.bind(this)
+            });
         }
     }, {
         key: 'render',
         value: function render() {
+            var _this2 = this;
+
             var style = { display: "none" };
             return React.createElement(
                 'div',
@@ -22065,14 +22129,14 @@ var Wrap = function (_React$Component) {
                         'div',
                         { className: 'weui-search-bar', id: 'searchBar' },
                         React.createElement(
-                            'form',
+                            'div',
                             { className: 'weui-search-bar__form' },
                             React.createElement(
                                 'div',
                                 { className: 'weui-search-bar__box' },
-                                React.createElement('i', { className: 'weui-icon-search', onClick: this.handClick }),
-                                React.createElement('input', { type: 'search', className: 'weui-search-bar__input', id: 'searchInput', placeholder: '\u641C\u7D22', required: '' }),
-                                React.createElement('span', { className: 'weui-icon-clear', id: 'searchClear' })
+                                React.createElement('i', { className: 'weui-icon-search' }),
+                                React.createElement('input', { type: 'search', className: 'weui-search-bar__input', id: 'searchInput', placeholder: '\u641C\u7D22', required: '', onKeyPress: this.onKeyPress }),
+                                React.createElement('span', { className: 'weui-icon-clear', id: 'searchClear', onClick: this.handClick })
                             )
                         )
                     )
@@ -22082,124 +22146,229 @@ var Wrap = function (_React$Component) {
                     { className: 'animate' },
                     React.createElement(
                         'div',
-                        { className: 'weui-actionsheet1 overflow_auto', id: 'file' },
+                        { className: 'weui-actionsheet1 overflow_auto donghua' },
                         React.createElement(
                             'div',
-                            { className: 'weui-cell' },
+                            { className: 'donghua_in' },
                             React.createElement(
                                 'div',
-                                { className: 'weui-cell__hd' },
+                                { className: 'weui-cell' },
                                 React.createElement(
-                                    'label',
-                                    { className: 'weui-label' },
-                                    '\u5730\u5740'
+                                    'div',
+                                    { className: 'weui-cell__hd' },
+                                    React.createElement(
+                                        'label',
+                                        { className: 'weui-label' },
+                                        '\u5730\u5740'
+                                    )
+                                ),
+                                React.createElement(
+                                    'div',
+                                    { className: 'weui-cell__bd' },
+                                    React.createElement(
+                                        'span',
+                                        { className: 'weui-input address' },
+                                        this.state.workInfor.address
+                                    )
                                 )
                             ),
                             React.createElement(
                                 'div',
-                                { className: 'weui-cell__bd' },
-                                React.createElement('input', { className: 'weui-input address', type: 'text', placeholder: '\u8BF7\u8F93\u5165\u5B89\u88C5\u5730\u5740' })
-                            )
-                        ),
-                        React.createElement(
-                            'div',
-                            { className: 'weui-cell' },
-                            React.createElement(
-                                'div',
-                                { className: 'weui-cell__hd' },
+                                { className: 'weui-cell' },
                                 React.createElement(
-                                    'label',
-                                    { className: 'weui-label' },
-                                    '\u8054\u7CFB\u59D3\u540D'
+                                    'div',
+                                    { className: 'weui-cell__hd' },
+                                    React.createElement(
+                                        'label',
+                                        { className: 'weui-label' },
+                                        '\u8054\u7CFB\u59D3\u540D'
+                                    )
+                                ),
+                                React.createElement(
+                                    'div',
+                                    { className: 'weui-cell__bd' },
+                                    React.createElement(
+                                        'span',
+                                        { className: 'weui-input link_name' },
+                                        this.state.workInfor.link_name
+                                    )
                                 )
                             ),
                             React.createElement(
                                 'div',
-                                { className: 'weui-cell__bd' },
-                                React.createElement('input', { className: 'weui-input link_name', type: 'text', placeholder: '\u8BF7\u8F93\u5165\u5BA2\u6237\u59D3\u540D' })
-                            )
-                        ),
-                        React.createElement(
-                            'div',
-                            { className: 'weui-cell' },
-                            React.createElement(
-                                'div',
-                                { className: 'weui-cell__hd' },
+                                { className: 'weui-cell' },
                                 React.createElement(
-                                    'label',
-                                    { className: 'weui-label' },
-                                    '\u8054\u7CFB\u7535\u8BDD'
+                                    'div',
+                                    { className: 'weui-cell__hd' },
+                                    React.createElement(
+                                        'label',
+                                        { className: 'weui-label' },
+                                        '\u8054\u7CFB\u7535\u8BDD'
+                                    )
+                                ),
+                                React.createElement(
+                                    'div',
+                                    { className: 'weui-cell__bd' },
+                                    React.createElement(
+                                        'span',
+                                        { className: 'weui-input mobile' },
+                                        this.state.workInfor.mobile
+                                    )
                                 )
                             ),
                             React.createElement(
                                 'div',
-                                { className: 'weui-cell__bd' },
-                                React.createElement('input', { className: 'weui-input mobile', type: 'text', placeholder: '\u8BF7\u8F93\u5165\u5BA2\u6237\u624B\u673A\u53F7' })
-                            )
-                        ),
-                        React.createElement(
-                            'div',
-                            { className: 'weui-cell' },
-                            React.createElement(
-                                'div',
-                                { className: 'weui-cell__hd' },
+                                { className: 'weui-cell' },
                                 React.createElement(
-                                    'label',
-                                    { className: 'weui-label' },
-                                    '\u8BA1\u5212\u5DE5\u4F5C\u65F6\u957F'
+                                    'div',
+                                    { className: 'weui-cell__hd' },
+                                    React.createElement(
+                                        'label',
+                                        { className: 'weui-label' },
+                                        '\u8BA1\u5212\u5DE5\u4F5C\u65F6\u957F'
+                                    )
+                                ),
+                                React.createElement(
+                                    'div',
+                                    { className: 'weui-cell__bd' },
+                                    React.createElement(
+                                        'span',
+                                        { className: 'weui-input working_hours' },
+                                        this.state.workInfor.working_hours,
+                                        'H'
+                                    )
                                 )
                             ),
                             React.createElement(
                                 'div',
-                                { className: 'weui-cell__bd' },
-                                React.createElement('input', { className: 'weui-input working_hours', type: 'text', placeholder: '\u8BF7\u8F93\u5165\u9884\u8BA1\u5DE5\u4F5C\u65F6\u957F/h' })
-                            )
-                        ),
-                        React.createElement(
-                            'div',
-                            { className: 'weui-cell' },
-                            React.createElement(
-                                'div',
-                                { className: 'weui-cell__hd' },
+                                { className: 'weui-cell' },
                                 React.createElement(
-                                    'label',
-                                    { className: 'weui-label' },
-                                    '\u9884\u8BA1\u5B8C\u6210\u65F6\u95F4'
+                                    'div',
+                                    { className: 'weui-cell__hd' },
+                                    React.createElement(
+                                        'label',
+                                        { className: 'weui-label' },
+                                        '\u5B8C\u6210\u65F6\u95F4'
+                                    )
+                                ),
+                                React.createElement(
+                                    'div',
+                                    { className: 'weui-cell__bd' },
+                                    React.createElement(
+                                        'span',
+                                        { className: 'weui-input form_datetime deadline' },
+                                        this.state.workInfor.deadline
+                                    )
                                 )
                             ),
                             React.createElement(
                                 'div',
-                                { className: 'weui-cell__bd' },
-                                React.createElement('input', { className: 'weui-input form_datetime deadline', type: 'text', placeholder: '', readOnly: true })
-                            )
-                        ),
-                        React.createElement(
-                            'div',
-                            { className: 'weui-cell' },
-                            React.createElement(
-                                'div',
-                                { className: 'weui-cell__hd' },
+                                { className: 'weui-cell' },
                                 React.createElement(
-                                    'label',
-                                    { className: 'weui-label' },
-                                    '\u9009\u62E9\u64CD\u4F5C\u5458'
+                                    'div',
+                                    { className: 'weui-cell__hd' },
+                                    React.createElement(
+                                        'label',
+                                        { className: 'weui-label' },
+                                        '\u64CD\u4F5C\u5458'
+                                    )
+                                ),
+                                React.createElement(
+                                    'div',
+                                    { className: 'weui-cell__bd' },
+                                    React.createElement(
+                                        'span',
+                                        { className: 'weui-input' },
+                                        this.state.workInfor.workers.map(function (item, index) {
+                                            return React.createElement(
+                                                'span',
+                                                { key: item },
+                                                _this2.state.m_worker[item]
+                                            );
+                                        })
+                                    )
                                 )
                             ),
                             React.createElement(
                                 'div',
-                                { className: 'weui-cell__bd' },
-                                React.createElement('input', { className: 'weui-input', placeholder: '\u70B9\u51FB\u9009\u62E9\u64CD\u4F5C\u5458', readOnly: true })
+                                { className: 'weui-cell' },
+                                React.createElement(
+                                    'div',
+                                    { className: 'weui-cell__hd' },
+                                    React.createElement(
+                                        'label',
+                                        { className: 'weui-label' },
+                                        '\u5DE5\u4F5C\u63CF\u8FF0'
+                                    )
+                                ),
+                                React.createElement(
+                                    'div',
+                                    { className: 'weui-cell__bd' },
+                                    React.createElement(
+                                        'span',
+                                        { className: 'weui-textarea task_desc' },
+                                        this.state.workInfor.task_desc
+                                    )
+                                )
                             )
                         ),
                         React.createElement(
-                            'div',
-                            { className: 'weui-cell' },
-                            React.createElement(
-                                'div',
-                                { className: 'weui-cell__bd' },
-                                React.createElement('textarea', { className: 'weui-textarea task_desc', placeholder: '\u4EFB\u52A1\u63CF\u8FF0', rows: '3' })
-                            )
+                            'p',
+                            { className: 'animate_close', onClick: this.handClick2 },
+                            'X'
                         )
+                    )
+                ),
+                React.createElement(
+                    'div',
+                    { className: 'task_list' },
+                    React.createElement(
+                        'ul',
+                        { className: 'task_list_title' },
+                        React.createElement(
+                            'li',
+                            null,
+                            '\u59D3\u540D'
+                        ),
+                        React.createElement(
+                            'li',
+                            null,
+                            '\u624B\u673A'
+                        ),
+                        React.createElement(
+                            'li',
+                            null,
+                            '\u5730\u5740'
+                        )
+                    ),
+                    React.createElement('hr', null),
+                    this.state.taskitem.map(function (item, index) {
+                        return React.createElement(
+                            'ul',
+                            { className: 'task_list_title', key: item.id, onClick: function onClick() {
+                                    return _this2.getData(item.id);
+                                } },
+                            React.createElement(
+                                'li',
+                                null,
+                                item.link_name
+                            ),
+                            React.createElement(
+                                'li',
+                                null,
+                                item.mobile
+                            ),
+                            React.createElement(
+                                'li',
+                                null,
+                                item.address
+                            )
+                        );
+                    }),
+                    React.createElement(
+                        'p',
+                        { className: 'task_list_close', onClick: this.handClick1 },
+                        'X'
                     )
                 )
             );
