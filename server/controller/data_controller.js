@@ -162,6 +162,7 @@ exports.register = function(server, options, next) {
             },
         },
         
+        //所有任务
         {
             method: "GET",
             path: '/list_task',
@@ -169,6 +170,46 @@ exports.register = function(server, options, next) {
                 var stage = request.query.stage;
                 
                 task.list_task(stage,function(err,content) {
+                    var rows = content.rows;
+                    if (!rows) {
+                        return reply({"success":true,"rows":[]});
+                    }
+                    list_worker(function(m_worker){
+                        return reply({"success":true,"rows":rows,"m_worker":m_worker});
+                    });
+                });
+            }
+        },
+        
+        //搜索已完成的任务
+        {
+            method: "GET",
+            path: '/search_complete',
+            handler: function(request, reply) {
+                var q = request.query.q;
+                if (!q) {
+                    return reply({"success":true,"rows":[]});
+                }
+                
+                task.search_complete(q,function(err,content) {
+                    var rows = content.rows;
+                    if (!rows) {
+                        return reply({"success":true,"rows":[]});
+                    }
+                    return reply({"success":true,"rows":rows});
+                });
+            }
+        },
+        
+        //我的任务
+        {
+            method: "GET",
+            path: '/list_my_task',
+            handler: function(request, reply) {
+                var worker_id = "1";
+                var stage = "inprogress";
+                
+                task.get_by_worker(worker_id,stage,function(err,content) {
                     var rows = content.rows;
                     if (!rows) {
                         return reply({"success":true,"rows":[]});
@@ -288,6 +329,19 @@ exports.register = function(server, options, next) {
             }
         },
         
+        //工人照片
+        {
+            method: "GET",
+            path: '/get_photo_by_worker',
+            handler: function(request, reply) {
+                var worker_id = "1";
+                
+                hr.get_photo_by_worker(worker_id,function(err,content) {
+                    return reply(content);
+                });
+            }
+        },
+        
         //工人列表加任务量
         {
             method: "GET",
@@ -308,6 +362,26 @@ exports.register = function(server, options, next) {
                         
                         return reply({"success":true,"message":"ok","rows":rows});
                     });
+                });
+            }
+        },
+        
+        //查询任务关联图片
+        {
+            method: "GET",
+            path: '/list_picture_by_task',
+            handler: function(request, reply) {
+                var id = request.query.id;
+                if (!id) {
+                    return reply({"success":false,"message":"param id is null","service_info":service_info});
+                }
+                
+                task.list_picture_by_task(id,function(err,content) {
+                    var rows = content.rows;
+                    if (!rows) {
+                        return reply({"success":true,"rows":[]});
+                    }
+                    return reply({"success":true,"rows":rows});
                 });
             }
         },

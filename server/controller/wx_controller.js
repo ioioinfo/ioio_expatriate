@@ -23,13 +23,13 @@ const util = require('util');
 const uu_request = require('../utils/uu_request');
 const wx_reply = require('../utils/wx_reply');
 
-var moduel_prefix = '4s_mp_web_wx';
+var moduel_prefix = 'worker_mp_web_wx';
 
 exports.register = function(server, options, next) {
-    var service_info = "4s mp web";
+    var service_info = "worker mp web";
     var host = "http://worker.ioioinfo.com/";
     var cookie_options = {ttl:10*365*24*60*60*1000};
-    var cookie_key = "hrbyd_openid";
+    var cookie_key = "ioio_expatriate_cookie";
     
     var wx_api = server.plugins.services.wx_api;
     var person = server.plugins.services.person;
@@ -48,9 +48,9 @@ exports.register = function(server, options, next) {
         //微信验证
         {
             method: 'GET',
-            path: '/MP_verify_MliAnvQ9HnZhE5hX.txt',
+            path: '/MP_verify_vBrz1szhoCGE5rvI.txt',
             handler: function(request,reply) {
-                return reply("MliAnvQ9HnZhE5hX");
+                return reply("vBrz1szhoCGE5rvI");
             }
         },
         
@@ -79,11 +79,11 @@ exports.register = function(server, options, next) {
             path: '/wechat',
             handler: function(request, reply) {
                 var body = request.payload;
-                var platform_id = "4s";
+                var platform_id = "worker";
                 
                 //状态机
                 var act_time = moment().format("YYYY-MM-DD HH:mm:ss");
-                var point = "wx_4s";
+                var point = "wx_worker";
                 
                 wx_reply.process_xml(body, function(xml,msg_type,openid,resp) {
                     if (msg_type == "text") {
@@ -94,9 +94,12 @@ exports.register = function(server, options, next) {
                             if (rows && rows.length > 0) {
                                 var row = rows[0];
                                 var person_id = row.person_id;
+                                if (!person_id) {
+                                    return reply(resp.text({content:"你的身份不能识别。请联系:13917684019"}));
+                                }
                                 var act_options = {"act_type":"wx_text","act_content":content};
                                 
-                                fsm.car4s_act(act_time, point,person_id,JSON.stringify(act_options),function(err,body) {
+                                fsm.worker_act(act_time, point,person_id,JSON.stringify(act_options),function(err,body) {
                                     if (body.info) {
                                         var info = JSON.parse(body.info);
                                         if (info.type == "text") {
@@ -105,11 +108,11 @@ exports.register = function(server, options, next) {
                                             return reply(resp.text({content:"你好"}));
                                         }
                                     } else {
-                                        return reply(resp.text({content:"你好"}));
+                                        return reply(resp.text({content:body.message}));
                                     }
                                 });
                             } else {
-                                return reply(resp.text({content:"你好"}));
+                                return reply(resp.text({content:"你的身份不能识别。请联系:13917684019"}));
                             }
                         });
                     } else if (msg_type == "image") {
@@ -123,7 +126,7 @@ exports.register = function(server, options, next) {
                                 var person_id = row.person_id;
                                 var act_options = {"act_type":"wx_image","act_content":pic_url};
                                 
-                                fsm.car4s_act(act_time, point,person_id,JSON.stringify(act_options),function(err,body) {
+                                fsm.worker_act(act_time, point,person_id,JSON.stringify(act_options),function(err,body) {
                                     if (body.info) {
                                         var info = JSON.parse(body.info);
                                         if (info.type == "text") {
@@ -159,30 +162,8 @@ exports.register = function(server, options, next) {
                                 var sex = info["sex"];
                                 var headimgurl = info["headimgurl"];
                                 var unionid = info["unionid"];
-                                var platform_id = "4s";
+                                var platform_id = "worker";
                                 
-                                //如果是扫描的员工二维码，发送通知
-                                if (scene) {
-                                    var person_id;
-                                    if (scene.substr(0,7) == "person_") {
-                                        person_id = scene.substr(7);
-                                    }
-                                    
-                                    //推送消息
-                                    var url = "http://127.0.0.1:18005/save_notification";
-                                    var message = {"title":"有新的用户加入","member_name":nickname,"remark":"请绑定用户合同信息","add_time":moment().format("YYYY年MM月DD号 HH:mm")};
-                                    var options = {"notify_type":"new_person_add","mp":{"platform_id":platform_id,"url":"http://4s.ioioinfo.com/bind_local?openid="+openid}};
-                                    
-                                    var data = {"platform_code":"4s","person_id":person_id,"message":JSON.stringify(message)
-                                        ,"options":JSON.stringify(options),"temporary":1};
-                                    uu_request.do_post_method(url,data,function(err,content) {
-                                        if (err) {
-                                            return reply({"success":false,"message":"notify error","service_info":service_info});
-                                        }
-                                        return reply({"success":true,"message":"ok","service_info":service_info});
-                                    });
-                                }
-
                                 person.save_wx(platform_id,openid,nickname,sex,headimgurl,unionid,scene, function(err,result) {
                                     console.log(result);
                                     return reply(resp.text({content:"终于等到你"}));

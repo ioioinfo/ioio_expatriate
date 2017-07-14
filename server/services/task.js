@@ -47,6 +47,18 @@ var nav = function(server) {
             });
         },
         
+        //搜索已完成的任务
+        search_complete: function(q,cb) {
+            if (!q) {
+                q = "";
+            }
+            var url = host + "outside_task/search_complete?q="+q;
+            
+            uu_request.do_get_method(url,function(err,content) {
+                cb(err,content)
+            });
+        },
+        
         //查询单个任务
         get_by_id: function(id,cb) {
             var url = host + "outside_task/get_by_id?id="+id;
@@ -92,6 +104,15 @@ var nav = function(server) {
         //工人当前任务量
         worker_task_count: function(cb) {
             var url = host + "outside_task/worker_task_count";
+            
+            uu_request.do_get_method(url,function(err,content) {
+                cb(err,content)
+            });
+        },
+        
+        //查询任务关联图片
+        list_picture_by_task: function(id,cb) {
+            var url = host + "outside_task/list_picture_by_task?id="+id;
             
             uu_request.do_get_method(url,function(err,content) {
                 cb(err,content)
