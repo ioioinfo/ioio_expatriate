@@ -34,6 +34,19 @@ var nav = function(server) {
                 }
             });
         },
+        
+        worker_act: function(act_time, point,person_id,act_options,cb) {
+            var url = host + "fsm/worker_act";
+            var data = {act_time:act_time,point:point,"person_id":person_id,"act_options":act_options};
+
+            uu_request.request(url, data, function(err, response, body) {
+                if (!err && response.statusCode === 200) {
+                    cb(err,body);
+                } else {
+                    cb(true,{message:"网络错误"});
+                }
+            });
+        },
     };
 };
 
