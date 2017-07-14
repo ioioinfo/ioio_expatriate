@@ -94,6 +94,9 @@ exports.register = function(server, options, next) {
                             if (rows && rows.length > 0) {
                                 var row = rows[0];
                                 var person_id = row.person_id;
+                                if (!person_id) {
+                                    return reply(resp.text({content:"你的身份不能识别。请联系:13917684019"}));
+                                }
                                 var act_options = {"act_type":"wx_text","act_content":content};
                                 
                                 fsm.worker_act(act_time, point,person_id,JSON.stringify(act_options),function(err,body) {
@@ -105,11 +108,11 @@ exports.register = function(server, options, next) {
                                             return reply(resp.text({content:"你好"}));
                                         }
                                     } else {
-                                        return reply(resp.text({content:"你好"}));
+                                        return reply(resp.text({content:body.message}));
                                     }
                                 });
                             } else {
-                                return reply(resp.text({content:"你好"}));
+                                return reply(resp.text({content:"你的身份不能识别。请联系:13917684019"}));
                             }
                         });
                     } else if (msg_type == "image") {
