@@ -44,6 +44,15 @@ var nav = function(server) {
             });
         },
         
+        //工作照
+        get_photo_by_worker: function(worker_id,cb) {
+            var url = host + "worker/get_photo_by_worker?worker_id="+worker_id;
+            
+            uu_request.do_get_method(url,function(err,content) {
+                cb(err,content)
+            });
+        },
+        
         employer_check: function(gonghao,mobile,cb) {
             var url = host + "hr/employer_check";
             var data = {gonghao:gonghao,mobile:mobile};

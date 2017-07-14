@@ -288,6 +288,19 @@ exports.register = function(server, options, next) {
             }
         },
         
+        //工人照片
+        {
+            method: "GET",
+            path: '/get_photo_by_worker',
+            handler: function(request, reply) {
+                var worker_id = "1";
+                
+                hr.get_photo_by_worker(worker_id,function(err,content) {
+                    return reply(content);
+                });
+            }
+        },
+        
         //工人列表加任务量
         {
             method: "GET",
