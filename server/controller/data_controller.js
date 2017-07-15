@@ -375,19 +375,15 @@ exports.register = function(server, options, next) {
                 var begin_date = moment().subtract(30, 'days').format("YYYY-MM-DD");
                 var end_date = moment().add(1, 'days').format("YYYY-MM-DD");
                 
-                get_worker(request,function(worker_id) {
-                    if (!worker_id) {
-                        return reply({"success":false,"message":"worker_id is null","service_info":service_info});
-                    }
+                var worker_id = "3";
                     
-                    task.get_by_worker(worker_id,stage,begin_date,end_date,function(err,content) {
-                        var rows = content.rows;
-                        if (!rows) {
-                            return reply({"success":true,"rows":[]});
-                        }
-                        list_worker(function(m_worker){
-                            return reply({"success":true,"rows":rows,"m_worker":m_worker});
-                        });
+                task.get_by_worker(worker_id,stage,begin_date,end_date,function(err,content) {
+                    var rows = content.rows;
+                    if (!rows) {
+                        return reply({"success":true,"rows":[]});
+                    }
+                    list_worker(function(m_worker){
+                        return reply({"success":true,"rows":rows,"m_worker":m_worker});
                     });
                 });
             }
