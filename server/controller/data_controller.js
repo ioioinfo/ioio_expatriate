@@ -257,6 +257,25 @@ exports.register = function(server, options, next) {
             }
         },
         
+        
+        //已完成的任务
+        {
+            method: "GET",
+            path: '/complete_by_date',
+            handler: function(request, reply) {
+                var begin_date = moment().subtract(30, 'days').format("YYYY-MM-DD");
+                var end_date = moment().add(1, 'days').format("YYYY-MM-DD");
+                
+                task.complete_by_date(begin_date,end_date,function(err,content) {
+                    var rows = content.rows;
+                    if (!rows) {
+                        return reply({"success":true,"rows":[]});
+                    }
+                    return reply({"success":true,"rows":rows});
+                });
+            }
+        },
+        
         //我的任务
         {
             method: "GET",
@@ -265,7 +284,10 @@ exports.register = function(server, options, next) {
                 var worker_id = "3";
                 var stage = "inprogress";
                 
-                task.get_by_worker(worker_id,stage,function(err,content) {
+                var begin_date;
+                var end_date;
+                
+                task.get_by_worker(worker_id,stage,begin_date,end_date,function(err,content) {
                     var rows = content.rows;
                     if (!rows) {
                         return reply({"success":true,"rows":[]});
@@ -322,12 +344,43 @@ exports.register = function(server, options, next) {
             handler: function(request,reply) {
                 var stage = request.query.stage;
                 
+                var begin_date;
+                var end_date;
+                
                 get_worker(request,function(worker_id) {
                     if (!worker_id) {
                         return reply({"success":false,"message":"worker_id is null","service_info":service_info});
                     }
                     
-                    task.get_by_worker(worker_id,stage,function(err,content) {
+                    task.get_by_worker(worker_id,stage,begin_date,end_date,function(err,content) {
+                        var rows = content.rows;
+                        if (!rows) {
+                            return reply({"success":true,"rows":[]});
+                        }
+                        list_worker(function(m_worker){
+                            return reply({"success":true,"rows":rows,"m_worker":m_worker});
+                        });
+                    });
+                });
+            }
+        },
+        
+        //按个人本月已完成任务
+        {
+            method: 'GET',
+            path: '/get_my_month_complete',
+            handler: function(request,reply) {
+                var stage = "complete";
+                
+                var begin_date = moment().subtract(30, 'days').format("YYYY-MM-DD");
+                var end_date = moment().add(1, 'days').format("YYYY-MM-DD");
+                
+                get_worker(request,function(worker_id) {
+                    if (!worker_id) {
+                        return reply({"success":false,"message":"worker_id is null","service_info":service_info});
+                    }
+                    
+                    task.get_by_worker(worker_id,stage,begin_date,end_date,function(err,content) {
                         var rows = content.rows;
                         if (!rows) {
                             return reply({"success":true,"rows":[]});

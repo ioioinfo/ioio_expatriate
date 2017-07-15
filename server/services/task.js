@@ -52,7 +52,17 @@ var nav = function(server) {
             if (!q) {
                 q = "";
             }
+            
             var url = host + "outside_task/search_complete?q="+q;
+            
+            uu_request.do_get_method(url,function(err,content) {
+                cb(err,content)
+            });
+        },
+        
+        //已完成的任务
+        complete_by_date: function(begin_date,end_date,cb) {
+            var url = host + "outside_task/complete_by_date?begin_date="+begin_date+"&end_date="+end_date;
             
             uu_request.do_get_method(url,function(err,content) {
                 cb(err,content)
@@ -61,7 +71,7 @@ var nav = function(server) {
         
         //查询单个任务
         get_by_id: function(id,cb) {
-            var url = host + "outside_task/get_by_id?id="+id;
+            var url = host + "outside_task/get_by_id?id="+id
             
             uu_request.do_get_method(url,function(err,content) {
                 cb(err,content)
@@ -79,12 +89,18 @@ var nav = function(server) {
         },
         
         //按个人查询任务
-        get_by_worker: function(worker_id,stage,cb) {
+        get_by_worker: function(worker_id,stage,begin_date,end_date,cb) {
             if (!stage) {
                 stage = "";
             }
+            if (!begin_date) {
+                begin_date = "";
+            }
+            if (!end_date) {
+                end_date = "";
+            }
             
-            var url = host + "outside_task/get_by_worker?worker_id="+worker_id+"&stage="+stage;
+            var url = host + "outside_task/get_by_worker?worker_id="+worker_id+"&stage="+stage+"&begin_date="+begin_date+"&end_date="+end_date;
             
             uu_request.do_get_method(url,function(err,content) {
                 cb(err,content)
