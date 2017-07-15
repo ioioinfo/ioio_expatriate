@@ -26,6 +26,7 @@ exports.register = function(server, options, next) {
     var person = server.plugins.services.person;
     var task = server.plugins.services.task;
     var hr = server.plugins.services.hr;
+    var notify = server.plugins.services.notify;
 
     var cookie_options = {ttl:10*365*24*60*60*1000};
     var cookie_key = "ioio_expatriate_cookie";
@@ -109,6 +110,61 @@ exports.register = function(server, options, next) {
             });
             
             cb(m_worker);
+        });
+    };
+    
+    var list_detail_worker = function(cb) {
+        hr.list_worker(function(err,content) {
+            var rows = content.rows;
+            var m_worker = {};
+            
+            _.each(rows,function(row) {
+                m_worker[row.id.toString()] = row;
+            });
+            
+            cb(m_worker);
+        });
+    };
+    
+    //推送微信消息
+    var save_notification = function(task_id,workers,cb) {
+        workers = JSON.parse(workers);
+        
+        //查询任务信息
+        task.get_by_id(task_id,function(err,content) {
+            if (err) {
+                cb(true,null);
+                return;
+            }
+            
+            var rows = content.rows;
+            if (rows.length == 0) {
+                cb(true,null);
+                return;
+            }
+            
+            var row = rows[0];
+            
+            var platform_id = "4s";
+            var remark = "\\n任务编号："+row.id+"\\n地址："+row.address+"\\n期限："+row.deadline+"\\n联系人："+row.link_name+"\\n联系电话："+row.mobile;
+            var message = {"title":"有新的任务","due_name":row.task_desc,"type_name":"新任务","remark":remark};
+            var options = {"notify_type":"due_process","mp":{"platform_id":platform_id,"url":"http://worker.ioioinfo.com/my_job"}};
+            
+            //查询工人
+            list_detail_worker(function(m_worker) {
+                _.each(workers,function(worker) {
+                    if (m_worker[worker]) {
+                        var mobile = m_worker[worker].mobile;
+                        if (mobile) {
+                            person.get_by_mobile(mobile,function(err,row) {
+                                if (!err) {
+                                    notify.save_notification(platform_id,row.person_id,message,options,function(err,content){});
+                                }
+                            });
+                        }
+                    }
+                });
+            });
         });
     };
 
@@ -206,7 +262,7 @@ exports.register = function(server, options, next) {
             method: "GET",
             path: '/list_my_task',
             handler: function(request, reply) {
-                var worker_id = "1";
+                var worker_id = "3";
                 var stage = "inprogress";
                 
                 task.get_by_worker(worker_id,stage,function(err,content) {
@@ -302,6 +358,9 @@ exports.register = function(server, options, next) {
                 }
                 
                 task.assign_worker(id,workers,function(err,content) {
+                    //推送消息
+                    save_notification(id,workers,function(err,content){});
+                    
                     return reply(content);
                 });
             }

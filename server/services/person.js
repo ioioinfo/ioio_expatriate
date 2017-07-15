@@ -104,6 +104,24 @@ var nav = function(server) {
                 }
             });
         },
+        
+        //根据手机号查询用户
+        get_by_mobile: function(mobile,cb) {
+            var url = host + "person/get_by_mobile?mobile=" + mobile;
+            uu_request.get(url, function(err, response, body) {
+                if (!err && response.statusCode === 200) {
+                    var info = JSON.parse(body);
+
+                    var row = {};
+                    if (info.success) {
+                        row = info.row;
+                    }
+                    cb(err,row);
+                } else {
+                    cb(true,{message:"网络错误"});
+                }
+            });
+        },
 
         save_wx: function(platform_id,openid,nickname,sex,headimgurl,unionid,scene,cb) {
             var url = host + "person/save_wx";
