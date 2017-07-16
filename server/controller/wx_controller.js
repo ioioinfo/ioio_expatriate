@@ -142,6 +142,38 @@ exports.register = function(server, options, next) {
                                 return reply(resp.text({content:"接收到图片:"+pic_url}));
                             }
                         });
+                    } else if (msg_type == "voice") {
+                        var media_id = xml.MediaId[0];
+                        var recognition;
+                        if (xml.Recognition) {
+                           recognition = xml.Recognition[0];
+                        }
+                        
+                        var act_content = {"media_id":media_id,"recognition":recognition};
+                        
+                        //获取用户信息
+                        person.get_person_wx(platform_id,openid,function(err,rows) {
+                            if (rows && rows.length > 0) {
+                                var row = rows[0];
+                                var person_id = row.person_id;
+                                var act_options = {"act_type":"wx_voice","act_content":act_content};
+                                
+                                fsm.worker_act(act_time, point,person_id,JSON.stringify(act_options),function(err,body) {
+                                    if (body.info) {
+                                        var info = JSON.parse(body.info);
+                                        if (info.type == "text") {
+                                            return reply(resp.text({content:info.text}));
+                                        } else {
+                                            return reply(resp.text({content:"你好"}));
+                                        }
+                                    } else {
+                                        return reply(resp.text({content:"你好"}));
+                                    }
+                                });
+                            } else {
+                                return reply(resp.text({content:"接收到图片:"+pic_url}));
+                            }
+                        });
                     } else if (msg_type == "event") {
                         var event = xml.Event[0];
                         //关注事件

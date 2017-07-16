@@ -78,7 +78,12 @@ exports.register = function(server, options, next) {
             method: 'GET',
             path: '/search',
             handler: function(request, reply) {
-                return reply.view("search");
+                var platform_id = "worker";
+                var p_url = request.connection.info.protocol + '://' + request.info.host + request.url.path;
+                
+                wx_api.jsapi_ticket(platform_id,p_url, function(err,info) {
+                    return reply.view("search", {info:info});
+                });
             },
         },
 
