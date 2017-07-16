@@ -1,7 +1,7 @@
 body,html{
   height: 100%;
   position: relative;
-  background: #20252B;
+  background: #f4f4f4;
 }
 .task_search{
   position: absolute;
@@ -54,6 +54,8 @@ li{
 }
 .task_list ul li:first-child{
   width: 25%;
+  text-align: left;
+  text-indent: 10px;
 }
 .task_list ul li:nth-child(3n+2){
   width: 25%;
@@ -68,18 +70,41 @@ li{
 .task_list_close{
   position: fixed;
   font-size: 24px;
-  color: #999;
+  color: red;
   bottom: 45px;
   right: 25px;
+  font-size: 24px;
   display: inline-block;
 }
 .animate_close{
   position: absolute;
   font-size: 18px;
-  color: #999;
   top: 12px;
   right: 15px;
   display: inline-block;
+}
+.task_img{
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 44px;
+  overflow: auto;
+  z-index: 9000;
+  display: none;
+  background: #fff;
+}
+.task_img img{
+  width: 100%;
+  margin-bottom: 4px;
+}
+#imgClear{
+  position: fixed;
+  bottom: 75px;
+  right: 20px;
+  font-size: 24px;
+  color: red;
 }
 #animation{
 -webkit-animation:bounceInDown 1s .2s ease both;

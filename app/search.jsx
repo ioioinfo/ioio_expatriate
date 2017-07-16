@@ -8,8 +8,9 @@ class Wrap extends React.Component {
       super(props);
       this.onKeyPress=this.onKeyPress.bind(this);
       this.handClick=this.handClick.bind(this);
+      this.handClick3=this.handClick3.bind(this);
       this.getData=this.getData.bind(this);
-      this.state={taskitem:[],workInfor:{"workers":[]},m_worker:{}};
+      this.state={taskitem:[],workInfor:{"workers":[]},m_worker:{},workImg:[]};
     }
 
     // enter键
@@ -52,6 +53,26 @@ class Wrap extends React.Component {
       $(".donghua").attr("id","task_list_out");
       $(".animate").css("display","none");
     }
+    handClick3(e){
+      var id = e.target.id;
+      $.ajax({
+          url: "/list_picture_by_task",
+          dataType: 'json',
+          type: 'GET',
+          data:{"id":id},
+          success: function(data) {
+              this.setState({workImg:data.rows});
+              if(data.success){
+                $(".task_img").css("display","block");
+              }
+          }.bind(this),
+              error: function(xhr, status, err) {
+          }.bind(this)
+      });
+    }
+    handClick4(e){
+      $(".task_img").hide();
+    }
     getData(id){
       $.ajax({
           url: "/get_by_id",
@@ -90,7 +111,15 @@ class Wrap extends React.Component {
 
               <div className="animate">
                   <div className="weui-actionsheet1 overflow_auto donghua">
-                      <div className="donghua_in">
+                    <div className="donghua_in">
+
+                      <div className="weui-cell">
+                          <div className="weui-cell__hd"><label className="weui-label">任务编号</label></div>
+                          <div className="weui-cell__bd">
+                              <span className="weui-input address">{this.state.workInfor.id}</span>
+                          </div>
+                      </div>
+
                       <div className="weui-cell">
                           <div className="weui-cell__hd"><label className="weui-label">地址</label></div>
                           <div className="weui-cell__bd">
@@ -143,9 +172,9 @@ class Wrap extends React.Component {
                               <span className="weui-textarea task_desc">{this.state.workInfor.task_desc}</span>
                           </div>
                       </div>
-
-                      </div>
-                      <p className="animate_close" onClick={this.handClick2}>X</p>
+                    <span className="weui-btn weui-btn_plain-default" id={this.state.workInfor.id} onClick={this.handClick3} >查看图片</span>
+                  </div>
+                      <span className="weui-icon-clear animate_close" onClick={this.handClick2}></span>
                   </div>
               </div>
 
@@ -160,7 +189,16 @@ class Wrap extends React.Component {
                       <li>{item.link_name}</li><li>{item.mobile}</li><li>{item.address}</li>
                     </ul>))
                   }
-                  <p className="task_list_close" onClick={this.handClick1}>X</p>
+                  <span className="weui-icon-clear task_list_close" onClick={this.handClick1}></span>
+              </div>
+
+
+              <div className="task_img">
+                {this.state.workImg.map((item,index)=> (
+                  <img key={item.order_index} src={item.location} alt="" />
+                  ))}
+
+                  <span className="weui-icon-clear" id="imgClear" onClick={this.handClick4}></span>
               </div>
             </div>
         );

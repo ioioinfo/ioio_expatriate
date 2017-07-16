@@ -22044,8 +22044,9 @@ var Wrap = function (_React$Component) {
 
         _this.onKeyPress = _this.onKeyPress.bind(_this);
         _this.handClick = _this.handClick.bind(_this);
+        _this.handClick3 = _this.handClick3.bind(_this);
         _this.getData = _this.getData.bind(_this);
-        _this.state = { taskitem: [], workInfor: { "workers": [] }, m_worker: {} };
+        _this.state = { taskitem: [], workInfor: { "workers": [] }, m_worker: {}, workImg: [] };
         return _this;
     }
 
@@ -22093,6 +22094,29 @@ var Wrap = function (_React$Component) {
         value: function handClick2(e) {
             $(".donghua").attr("id", "task_list_out");
             $(".animate").css("display", "none");
+        }
+    }, {
+        key: 'handClick3',
+        value: function handClick3(e) {
+            var id = e.target.id;
+            $.ajax({
+                url: "/list_picture_by_task",
+                dataType: 'json',
+                type: 'GET',
+                data: { "id": id },
+                success: function (data) {
+                    this.setState({ workImg: data.rows });
+                    if (data.success) {
+                        $(".task_img").css("display", "block");
+                    }
+                }.bind(this),
+                error: function (xhr, status, err) {}.bind(this)
+            });
+        }
+    }, {
+        key: 'handClick4',
+        value: function handClick4(e) {
+            $(".task_img").hide();
         }
     }, {
         key: 'getData',
@@ -22150,6 +22174,28 @@ var Wrap = function (_React$Component) {
                         React.createElement(
                             'div',
                             { className: 'donghua_in' },
+                            React.createElement(
+                                'div',
+                                { className: 'weui-cell' },
+                                React.createElement(
+                                    'div',
+                                    { className: 'weui-cell__hd' },
+                                    React.createElement(
+                                        'label',
+                                        { className: 'weui-label' },
+                                        '\u4EFB\u52A1\u7F16\u53F7'
+                                    )
+                                ),
+                                React.createElement(
+                                    'div',
+                                    { className: 'weui-cell__bd' },
+                                    React.createElement(
+                                        'span',
+                                        { className: 'weui-input address' },
+                                        this.state.workInfor.id
+                                    )
+                                )
+                            ),
                             React.createElement(
                                 'div',
                                 { className: 'weui-cell' },
@@ -22310,13 +22356,14 @@ var Wrap = function (_React$Component) {
                                         this.state.workInfor.task_desc
                                     )
                                 )
+                            ),
+                            React.createElement(
+                                'span',
+                                { className: 'weui-btn weui-btn_plain-default', id: this.state.workInfor.id, onClick: this.handClick3 },
+                                '\u67E5\u770B\u56FE\u7247'
                             )
                         ),
-                        React.createElement(
-                            'p',
-                            { className: 'animate_close', onClick: this.handClick2 },
-                            'X'
-                        )
+                        React.createElement('span', { className: 'weui-icon-clear animate_close', onClick: this.handClick2 })
                     )
                 ),
                 React.createElement(
@@ -22365,11 +22412,15 @@ var Wrap = function (_React$Component) {
                             )
                         );
                     }),
-                    React.createElement(
-                        'p',
-                        { className: 'task_list_close', onClick: this.handClick1 },
-                        'X'
-                    )
+                    React.createElement('span', { className: 'weui-icon-clear task_list_close', onClick: this.handClick1 })
+                ),
+                React.createElement(
+                    'div',
+                    { className: 'task_img' },
+                    this.state.workImg.map(function (item, index) {
+                        return React.createElement('img', { key: item.order_index, src: item.location, alt: '' });
+                    }),
+                    React.createElement('span', { className: 'weui-icon-clear', id: 'imgClear', onClick: this.handClick4 })
                 )
             );
         }
