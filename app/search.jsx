@@ -61,9 +61,19 @@ class Wrap extends React.Component {
           type: 'GET',
           data:{"id":id},
           success: function(data) {
-              this.setState({workImg:data.rows});
               if(data.success){
-                $(".task_img").css("display","block");
+                if (data.rows.length > 0) {
+                  var urls = [];
+                  for (var i = 0; i < data.rows.length; i++) {
+                    urls.push(data.rows[i].location);
+                  }
+                  wx.previewImage({
+                      current: urls[0],
+                      urls: urls
+                  });
+                }else {
+                  alert("没有图片");
+                }
               }
           }.bind(this),
               error: function(xhr, status, err) {

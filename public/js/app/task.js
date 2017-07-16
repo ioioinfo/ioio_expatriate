@@ -22166,10 +22166,12 @@ var Wrap = function (_React$Component) {
                 data: { stage: "inprogress" },
                 success: function (data) {
                     var list = data.rows;
+                    this.setState({ taskitem: list, m_worker: data.m_worker });
                     if (list.length == 0) {
                         $(".no_task").css("display", "block");
+                    } else {
+                        $(".no_task").css("display", "none");
                     }
-                    this.setState({ taskitem: list, m_worker: data.m_worker });
                 }.bind(this),
                 error: function (xhr, status, err) {}.bind(this)
             });

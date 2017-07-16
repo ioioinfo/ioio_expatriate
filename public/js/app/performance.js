@@ -22049,14 +22049,13 @@ var Wrap = function (_React$Component) {
     key: 'componentDidMount',
     value: function componentDidMount() {
       $.ajax({
-        url: "/list_task",
+        url: "/get_my_month_complete",
         dataType: 'json',
         type: 'GET',
         data: {},
         success: function (data) {
           var list = data.rows;
-          if (!list) {
-
+          if (list.length == 0) {
             $(".no_task").css("display", "block");
           }
           this.setState({ taskitem: list, m_worker: data.m_worker });

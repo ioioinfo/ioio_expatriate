@@ -122,12 +122,12 @@ class Wrap extends React.Component {
           data:{stage:"inprogress"},
           success: function(data) {
               var list = data.rows;
-              if(list.length==0){
-                  $(".no_task").css("display","block");
-              }
                 this.setState({taskitem:list,m_worker:data.m_worker});
-
-
+                if(list.length==0){
+                    $(".no_task").css("display","block");
+                }else {
+                  $(".no_task").css("display","none");
+                }
           }.bind(this),
               error: function(xhr, status, err) {
           }.bind(this)
@@ -147,6 +147,7 @@ class Wrap extends React.Component {
       });
 
       this.rowData();
+
     }
 
     // 工人id
