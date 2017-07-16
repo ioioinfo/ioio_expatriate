@@ -21,6 +21,7 @@ module.exports = {
         task: './app/task.jsx',
         bind: './app/bind.jsx',
         search: './app/search.jsx',
+        admin_performance: './app/admin_performance.jsx',
     },
     output: {
         path: __dirname,

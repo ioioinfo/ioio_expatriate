@@ -46,18 +46,21 @@ body,html{
   display: none;
 }
 .animation{
--webkit-animation:bounce 1s .2s ease both;
--moz-animation:bounce 1s .2s ease both;}
-@-webkit-keyframes bounce{
-0%,20%,50%,80%,100%{-webkit-transform:translateY(0)}
-40%{-webkit-transform:translateY(-30px)}
-60%{-webkit-transform:translateY(-15px)}
+-webkit-animation:rotateIn 1s .2s ease both;
+-moz-animation:rotateIn 1s .2s ease both;}
+@-webkit-keyframes rotateIn{
+0%{-webkit-transform-origin:center center;
+-webkit-transform:rotate(-200deg);
+opacity:0}
+100%{-webkit-transform-origin:center center;
+-webkit-transform:rotate(0);
+opacity:1}
 }
-@-moz-keyframes bounce{
-0%,20%,50%,80%,100%{-moz-transform:translateY(0)}
-40%{-moz-transform:translateY(-30px)}
-60%{-moz-transform:translateY(-15px)}
-}
-.span_left{
-  margin-left: 10px;
+@-moz-keyframes rotateIn{
+0%{-moz-transform-origin:center center;
+-moz-transform:rotate(-200deg);
+opacity:0}
+100%{-moz-transform-origin:center center;
+-moz-transform:rotate(0);
+opacity:1}
 }

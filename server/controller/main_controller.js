@@ -51,8 +51,20 @@ exports.register = function(server, options, next) {
             method: 'GET',
             path: '/performance',
             handler: function(request, reply) {
-                return reply.view("performance");
+              var platform_id = "worker";
+              var p_url = request.connection.info.protocol + '://' + request.info.host + request.url.path;
+
+              wx_api.jsapi_ticket(platform_id,p_url, function(err,info) {
+                  return reply.view("performance", {info:info});
+              });
             },
+        },
+        //admin_performance业绩
+        {
+            method: 'GET',
+            path: '/admin_performance',
+            handler: function(request, reply) {
+              return reply.view("admin_performance");
         },
 
         //task管理员任务
@@ -80,7 +92,7 @@ exports.register = function(server, options, next) {
             handler: function(request, reply) {
                 var platform_id = "worker";
                 var p_url = request.connection.info.protocol + '://' + request.info.host + request.url.path;
-                
+
                 wx_api.jsapi_ticket(platform_id,p_url, function(err,info) {
                     return reply.view("search", {info:info});
                 });

@@ -10,7 +10,7 @@ class Wrap extends React.Component {
     }
     componentDidMount(){
       $.ajax({
-          url: "/get_my_month_complete",
+          url: "/complete_by_date",
           dataType: 'json',
           type: 'GET',
           data:{},
