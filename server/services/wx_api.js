@@ -101,6 +101,23 @@ var nav = function(server) {
                 cb(err,body);
             });
         },
+        
+        jsapi_ticket: function(platform_id,p_url,cb) {
+            var url = host + "jsapi_ticket?platform_id=" + platform_id + "&p_url=" + p_url;
+            uu_request.get(url, function(err, response, body) {
+                if (!err && response.statusCode === 200) {
+                    var info = JSON.parse(body);
+                    
+                    if (info.success) {
+                        cb(err,info.info);
+                    } else {
+                        cb(true,null);
+                    }
+                } else {
+                    cb(true,{message:"网络错误"});
+                }
+            });
+        },
     };
 };
 
