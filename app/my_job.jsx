@@ -64,6 +64,10 @@ class Task extends React.Component {
                 </div>
               </div>
             <div className="weui-form-preview__bd">
+            <div className="weui-form-preview__item">
+              <label className="weui-form-preview__label">任务编号</label>
+              <span className="weui-form-preview__value">{this.props.item.id}</span>
+            </div>
               <div className="weui-form-preview__item">
                 <label className="weui-form-preview__label">地址</label>
                 <span className="weui-form-preview__value">{this.props.item.address}</span>

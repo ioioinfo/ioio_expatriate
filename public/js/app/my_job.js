@@ -22164,6 +22164,20 @@ var Task = function (_React$Component2) {
               React.createElement(
                 'label',
                 { className: 'weui-form-preview__label' },
+                '\u4EFB\u52A1\u7F16\u53F7'
+              ),
+              React.createElement(
+                'span',
+                { className: 'weui-form-preview__value' },
+                this.props.item.id
+              )
+            ),
+            React.createElement(
+              'div',
+              { className: 'weui-form-preview__item' },
+              React.createElement(
+                'label',
+                { className: 'weui-form-preview__label' },
                 '\u5730\u5740'
               ),
               React.createElement(

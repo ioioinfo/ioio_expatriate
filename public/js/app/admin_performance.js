@@ -22176,7 +22176,7 @@ var Task = function (_React$Component2) {
               React.createElement(
                 'em',
                 { className: 'weui-form-preview__value animation', 'data-role': this.props.item.id },
-                '\u5DF2\u5B8C\u6210'
+                this.props.item.link_name
               )
             )
           ),

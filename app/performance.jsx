@@ -90,7 +90,7 @@ class Task extends React.Component {
               <div className="weui-form-preview__hd" data-role={this.props.item.id} onClick={this.handleClick}>
                 <div className="weui-form-preview__item" data-role={this.props.item.id} >
                   <label className="weui-form-preview__label" data-role={this.props.item.id} >{this.props.item.deadline}</label>
-                  <em className="weui-form-preview__value animation" data-role={this.props.item.id} >已完成</em>
+                  <em className="weui-form-preview__value animation" data-role={this.props.item.id} >{this.props.item.link_name}</em>
                 </div>
               </div>
             <div className="weui-form-preview__bd task_hide" id={"task_list"+this.props.item.id}>
