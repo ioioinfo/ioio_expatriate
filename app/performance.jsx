@@ -45,7 +45,7 @@ class Task extends React.Component {
     handleClick(e){;
       var id = $(e.target).data("role");
       var task_list = "task_list"+id;
-      $("#"+task_list).toggle(100);
+      $("#"+task_list).slideToggle(100);
     }
     componentDidMount(){
       $(".task_hide").hide();

@@ -22038,7 +22038,7 @@ var Wrap = function (_React$Component) {
 
     var _this = _possibleConstructorReturn(this, (Wrap.__proto__ || Object.getPrototypeOf(Wrap)).call(this, props));
 
-    _this.state = { taskitem: [], m_worker: {} };
+    _this.state = { taskitem: [] };
     return _this;
   }
 
@@ -22055,7 +22055,7 @@ var Wrap = function (_React$Component) {
           if (list.length == 0) {
             $(".no_task").css("display", "block");
           }
-          this.setState({ taskitem: list, m_worker: data.m_worker });
+          this.setState({ taskitem: list });
         }.bind(this),
         error: function (xhr, status, err) {}.bind(this)
       });
@@ -22068,13 +22068,11 @@ var Wrap = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
-      var _this2 = this;
-
       return React.createElement(
         'div',
         { className: 'wrap' },
         this.state.taskitem.map(function (item, index) {
-          return React.createElement(Task, { item: item, key: item.id, m_worker: _this2.state.m_worker });
+          return React.createElement(Task, { item: item, key: item.id });
         }),
         React.createElement(
           'p',
@@ -22105,7 +22103,7 @@ var Task = function (_React$Component2) {
       ;
       var id = $(e.target).data("role");
       var task_list = "task_list" + id;
-      $("#" + task_list).toggle(100);
+      $("#" + task_list).slideToggle(100);
     }
   }, {
     key: 'componentDidMount',
@@ -22143,8 +22141,6 @@ var Task = function (_React$Component2) {
   }, {
     key: 'render',
     value: function render() {
-      var _this4 = this;
-
       var workers = React.createElement('span', null);
       if (this.props.item.workers) {
         workers = React.createElement(
@@ -22154,7 +22150,7 @@ var Task = function (_React$Component2) {
             return React.createElement(
               'span',
               { key: item },
-              _this4.props.m_worker[item],
+              item[item],
               ' /'
             );
           })

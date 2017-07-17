@@ -6,7 +6,7 @@ var ReactDOM = require('react-dom');
 class Wrap extends React.Component {
     constructor(props) {
         super(props);
-        this.state={taskitem:[],m_worker:{}}
+        this.state={taskitem:[]}
     }
     componentDidMount(){
       $.ajax({
@@ -19,7 +19,7 @@ class Wrap extends React.Component {
               if(list.length==0){
                   $(".no_task").css("display","block");
               }
-                this.setState({taskitem:list,m_worker:data.m_worker});
+                this.setState({taskitem:list});
           }.bind(this),
               error: function(xhr, status, err) {
           }.bind(this)
@@ -33,7 +33,7 @@ class Wrap extends React.Component {
         return (
             <div className="wrap">
               {this.state.taskitem.map((item,index)=> (
-                  <Task item={item} key={item.id} m_worker={this.state.m_worker} />))
+                  <Task item={item} key={item.id}/>))
               }
               <p className="no_task">还没有完成的任务</p>
             </div>
@@ -45,7 +45,7 @@ class Task extends React.Component {
     handleClick(e){;
       var id = $(e.target).data("role");
       var task_list = "task_list"+id;
-      $("#"+task_list).toggle(100);
+      $("#"+task_list).slideToggle(100);
     }
     componentDidMount(){
       $(".task_hide").hide();
@@ -81,7 +81,7 @@ class Task extends React.Component {
         var workers = (<span></span>);
         if(this.props.item.workers){
           workers = (<span>{this.props.item.workers.map(item=> (
-              <span key={item}>{this.props.m_worker[item]} /</span>))
+              <span key={item}>{item[item]} /</span>))
           }</span>)
         }
         return (
