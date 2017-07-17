@@ -33,7 +33,7 @@ server.state('cookie', {
     isSecure: false,
     isHttpOnly: true,
     encoding: 'base64json',
-    clearInvalid: false,
+    clearInvalid: true,
     strictHeader: true
 });
 
