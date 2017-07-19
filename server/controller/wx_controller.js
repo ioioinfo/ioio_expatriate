@@ -54,6 +54,15 @@ exports.register = function(server, options, next) {
             }
         },
         
+        //微信验证，龙腾广告
+        {
+            method: 'GET',
+            path: '/MP_verify_50tGTGs5qhZGX2b2.txt',
+            handler: function(request,reply) {
+                return reply("50tGTGs5qhZGX2b2");
+            }
+        },
+        
         {
             method: 'GET',
             path: '/wechat',
